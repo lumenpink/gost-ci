@@ -57,3 +57,67 @@ jobs:
             -c "mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
             /kaniko/executor --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-deploy:latest --destination=codeberg.org/lumenpink/gost-ci-deploy:node24"
+
+  build-wasm:
+    name: "Build & Push gost-ci-wasm"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-wasm:latest --destination=codeberg.org/lumenpink/gost-ci-wasm:1.98.1"
+
+  build-shell:
+    name: "Build & Push gost-ci-shell"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-shell:latest --destination=codeberg.org/lumenpink/gost-ci-shell:0.28.1"
+
+  build-php:
+    name: "Build & Push gost-ci-php"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-php:latest --destination=codeberg.org/lumenpink/gost-ci-php:8.4"
+
+  build-gui:
+    name: "Build & Push gost-ci-gui"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-gui:latest --destination=codeberg.org/lumenpink/gost-ci-gui:1.98.1"
