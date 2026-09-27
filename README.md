@@ -28,7 +28,7 @@ jobs:
     name: "Rust — Tests & Checks"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-rust:latest
+      image: lumenpink/gost-ci-rust:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
     name: "Rust — Release Binaries"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-cross:latest
+      image: lumenpink/gost-ci-cross:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
     name: "Deploy Documentation Site"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-deploy:latest
+      image: lumenpink/gost-ci-deploy:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
