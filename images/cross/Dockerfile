@@ -18,7 +18,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tar \
     gzip \
     gcc-i686-linux-gnu \
+    libc6-dev-i386-cross \
     gcc-arm-linux-gnueabihf \
+    libc6-dev-armhf-cross \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- \
