@@ -1,0 +1,59 @@
+name: Build and Publish Containers
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-rust:
+    name: "Build & Push gost-ci-rust"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-rust:latest --destination=codeberg.org/lumenpink/gost-ci-rust:1.98.1"
+
+  build-cross:
+    name: "Build & Push gost-ci-cross"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-cross:latest --destination=codeberg.org/lumenpink/gost-ci-cross:1.98.1"
+
+  build-deploy:
+    name: "Build & Push gost-ci-deploy"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-deploy:latest --destination=codeberg.org/lumenpink/gost-ci-deploy:node24"
