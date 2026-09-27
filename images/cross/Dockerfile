@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM node:24-bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUST_VERSION=1.98.1
