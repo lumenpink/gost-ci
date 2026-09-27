@@ -10,13 +10,17 @@ Este projeto adota a norma **[GOST](https://codeberg.org/lumenpink/gost)** (Gosp
 - **Licença de Código:** `Apache-2.0`
 - **Licença de Marca/Logo:** `CC-BY-ND-4.0`
 
-## 📦 Matriz de Imagens
+## 📦 Matriz de Imagens Especializadas
 
 | Imagem | Base | Ambiente & Versões | Propósito Principal |
 | :--- | :--- | :--- | :--- |
-| **`gost-ci-rust`** | `debian:bookworm-slim` | Rust `1.98.1` (stable), `cargo`, `rustfmt`, `clippy`, `build-essential`, `git` | Pipeline de verificação: `cargo check`, `cargo test`, `fmt` e `clippy` |
-| **`gost-ci-cross`** | `debian:bookworm-slim` | Rust `1.98.1`, targets `x86_64`, `i686`, `armv7` + `gcc-multilib`, `gcc-arm-linux-gnueabihf`, `tar` | Compilação cruzada e empacotamento multi-arquitetura (`build-release`, `publish-nightly`) |
+| **`gost-ci-rust`** | `node:24-bookworm-slim` | Rust `1.98.1` (stable), `cargo`, `rustfmt`, `clippy`, `build-essential`, `git` | Pipeline de verificação: `cargo check`, `cargo test`, `fmt` e `clippy` |
+| **`gost-ci-cross`** | `node:24-bookworm-slim` | Rust `1.98.1`, targets `x86_64`, `i686`, `armv7` + `gcc-multilib`, `gcc-arm-linux-gnueabihf`, `tar` | Compilação cruzada e empacotamento multi-arquitetura (`build-release`, `publish-nightly`) |
 | **`gost-ci-deploy`** | `node:24-bookworm-slim` | Node.js `24`, `npm`, `wrangler@latest`, `git`, `curl` | Entrega de documentação e sites estáticos (Cloudflare Workers / Codeberg Pages) |
+| **`gost-ci-wasm`** | `node:24-bookworm-slim` | Rust `1.98.1`, target `wasm32-unknown-unknown`, `wasm-pack` `v0.13.1` | Compilação hermética de aplicações WebAssembly (`navalha`, `kokorosim`) |
+| **`gost-ci-shell`** | `node:24-bookworm-slim` | `shellspec` `0.28.1`, `shfmt` `v3.10.0`, `shellcheck`, `bash`, `git`, `jq` | Testes BDD e análise estática hermética de scripts shell (`cccp`) |
+| **`gost-ci-php`** | `php:8.4-cli` | PHP `8.4`, `composer:2`, extensões (`gd`, `zip`, `exif`, `sqlite3`, `pcntl`, `intl`), `xdebug`, Node `22` | Testes unitários (Pest), análise de código (Pint, Psalm) e auditoria (`indieinabox`, `fuxico`) |
+| **`gost-ci-gui`** | `node:24-bookworm-slim` | Rust `1.98.1`, `libwebkit2gtk-4.1-dev`, `libasound2-dev`, `build-essential` | Compilação e testes de aplicações desktop Linux (`lacraia`) |
 
 ## 🛠️ Como Consumir em Workflows Forgejo / GitHub Actions
 
@@ -28,14 +32,10 @@ jobs:
     name: "Rust — Tests & Checks"
     runs-on: ubuntu-latest
     container:
-      image: lumenpink/gost-ci-rust:latest
+      image: codeberg.org/lumenpink/gost-ci-rust:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
-
-      - name: "Cargo Check"
-        run: cargo check --verbose
-
       - name: "Cargo Test"
         run: cargo test --verbose
 ```
@@ -48,19 +48,17 @@ jobs:
     name: "Rust — Release Binaries"
     runs-on: ubuntu-latest
     container:
-      image: lumenpink/gost-ci-cross:latest
+      image: codeberg.org/lumenpink/gost-ci-cross:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
-
       - name: "Build Multi-Target"
         run: |
-          cargo build --release
           cargo build --release --target i686-unknown-linux-gnu
           cargo build --release --target armv7-unknown-linux-gnueabihf
 ```
 
-### 3. Deploy de Documentação (`gost-ci-deploy`)
+### 3. Deploy de Documentação & WebApps (`gost-ci-deploy`)
 
 ```yaml
 jobs:
@@ -68,13 +66,80 @@ jobs:
     name: "Deploy Documentation Site"
     runs-on: ubuntu-latest
     container:
-      image: lumenpink/gost-ci-deploy:latest
+      image: codeberg.org/lumenpink/gost-ci-deploy:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
-
       - name: "Publish Site"
         run: wrangler deploy
+```
+
+### 4. Compilação WebAssembly (`gost-ci-wasm`)
+
+```yaml
+jobs:
+  build-wasm:
+    name: "Build Wasm Bundle"
+    runs-on: ubuntu-latest
+    container:
+      image: codeberg.org/lumenpink/gost-ci-wasm:latest
+    steps:
+      - name: "Checkout"
+        uses: https://github.com/actions/checkout@v4
+      - name: "Compile Wasm"
+        run: wasm-pack build --target web --out-dir dist/pkg
+```
+
+### 5. Validação e Testes Shell (`gost-ci-shell`)
+
+```yaml
+jobs:
+  test-shell:
+    name: "Shell Quality & Spec"
+    runs-on: ubuntu-latest
+    container:
+      image: codeberg.org/lumenpink/gost-ci-shell:latest
+    steps:
+      - name: "Checkout"
+        uses: https://github.com/actions/checkout@v4
+      - name: "ShellCheck"
+        run: shellcheck scripts/*.sh
+      - name: "ShellSpec"
+        run: shellspec --format documentation
+```
+
+### 6. Testes PHP & Composer (`gost-ci-php`)
+
+```yaml
+jobs:
+  test-php:
+    name: "PHP 8.4 Tests"
+    runs-on: ubuntu-latest
+    container:
+      image: codeberg.org/lumenpink/gost-ci-php:latest
+    steps:
+      - name: "Checkout"
+        uses: https://github.com/actions/checkout@v4
+      - name: "Install Deps"
+        run: composer install --prefer-dist --no-progress
+      - name: "Run Pest"
+        run: ./vendor/bin/pest
+```
+
+### 7. Aplicações Desktop WebKitGTK (`gost-ci-gui`)
+
+```yaml
+jobs:
+  build-gui:
+    name: "Rust GUI Desktop"
+    runs-on: ubuntu-latest
+    container:
+      image: codeberg.org/lumenpink/gost-ci-gui:latest
+    steps:
+      - name: "Checkout"
+        uses: https://github.com/actions/checkout@v4
+      - name: "Cargo Build"
+        run: cargo build --release
 ```
 
 ## 📄 Licenciamento
