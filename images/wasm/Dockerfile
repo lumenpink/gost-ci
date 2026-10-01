@@ -32,4 +32,8 @@ RUN curl -fsSL "https://github.com/rustwasm/wasm-pack/releases/download/${WASM_P
     && chmod +x /usr/local/bin/wasm-pack \
     && wasm-pack --version
 
+RUN npm install -g wrangler \
+    && wrangler --version
+
 CMD ["bash"]
+
