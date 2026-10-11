@@ -1,4 +1,4 @@
-FROM node:24-bookworm-slim
+FROM node:24-trixie-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUST_VERSION=1.98.1
@@ -32,9 +32,9 @@ RUN curl -fsSL "https://github.com/rustwasm/wasm-pack/releases/download/${WASM_P
     && chmod +x /usr/local/bin/wasm-pack \
     && wasm-pack --version
 
-ENV DIOXUS_VERSION=v0.6.3
+ENV DIOXUS_VERSION=v0.7.10
 
-RUN curl -fsSL "https://github.com/DioxusLabs/dioxus/releases/download/${DIOXUS_VERSION}/dx-x86_64-unknown-linux-gnu-${DIOXUS_VERSION}.tar.gz" \
+RUN curl -fsSL "https://github.com/DioxusLabs/dioxus/releases/download/${DIOXUS_VERSION}/dx-x86_64-unknown-linux-gnu.tar.gz" \
     | tar -xz -C /usr/local/bin \
     && chmod +x /usr/local/bin/dx \
     && dx --version
