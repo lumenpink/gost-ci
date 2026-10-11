@@ -32,6 +32,13 @@ RUN curl -fsSL "https://github.com/rustwasm/wasm-pack/releases/download/${WASM_P
     && chmod +x /usr/local/bin/wasm-pack \
     && wasm-pack --version
 
+ENV DIOXUS_VERSION=v0.6.3
+
+RUN curl -fsSL "https://github.com/DioxusLabs/dioxus/releases/download/${DIOXUS_VERSION}/dx-x86_64-unknown-linux-gnu-${DIOXUS_VERSION}.tar.gz" \
+    | tar -xz -C /usr/local/bin \
+    && chmod +x /usr/local/bin/dx \
+    && dx --version
+
 RUN npm install -g wrangler \
     && wrangler --version
 
