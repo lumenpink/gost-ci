@@ -147,3 +147,4 @@ jobs:
 
 - **Código & Scripts:** [Apache-2.0](./LICENSE)
 - **Marca e Logotipo:** [CC-BY-ND-4.0](./LICENSE-LOGO)
+- **Mídias e Ilustrações:** [CC-BY-SA-4.0](./LICENSE-MEDIA)
