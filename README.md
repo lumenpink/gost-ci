@@ -21,6 +21,7 @@ Este projeto adota a norma **[GOST](https://codeberg.org/lumenpink/gost)** (Gosp
 | **`gost-ci-shell`** | `node:24-bookworm-slim` | `shellspec` `0.28.1`, `shfmt` `v3.10.0`, `shellcheck`, `bash`, `git`, `jq` | Testes BDD e análise estática hermética de scripts shell (`cccp`) |
 | **`gost-ci-php`** | `php:8.4-cli` | PHP `8.4`, `composer:2`, extensões (`gd`, `zip`, `exif`, `sqlite3`, `pcntl`, `intl`), `xdebug`, Node `22` | Testes unitários (Pest), análise de código (Pint, Psalm) e auditoria (`indieinabox`, `fuxico`) |
 | **`gost-ci-gui`** | `node:24-bookworm-slim` | Rust `1.98.1`, `libwebkit2gtk-4.1-dev`, `libasound2-dev`, `build-essential` | Compilação e testes de aplicações desktop Linux (`lacraia`) |
+| **`gost-ci-flutter`** | `debian:bookworm-slim` | Flutter `stable`, OpenJDK `17`, Android SDK `34`, `build-tools;34.0.0` | Compilação hermética e determinística de APKs Android/Flutter (`mocambo`) |
 
 ## 🛠️ Como Consumir em Workflows Forgejo / GitHub Actions
 

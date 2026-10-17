@@ -155,3 +155,19 @@ jobs:
             echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
             /kaniko/executor --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-banca:latest"
 
+  build-flutter:
+    name: "Build & Push gost-ci-flutter"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: https://github.com/actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-flutter:latest"
+
