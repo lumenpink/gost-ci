@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # tests/test-dockerhub-registry.sh — Validação estrita da migração para Docker Hub (#14)
+# Em estrita conformidade com as diretivas GOST 1.4.0 e perfis CCCP.
 set -eo pipefail
 
 WORKFLOW=".forgejo/workflows/build-images.yml"
