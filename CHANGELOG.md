@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (ci) migrar publicacao de containers para Docker Hub (closes #14)
   - (cross) adicionar suporte a alvos multiarch aarch64, musl e windows mingw (closes #13)
   - (images) criar imagem gost-ci-gui com WebKitGTK e áudio para aplicações desktop (resolves #8)
   - (images) criar imagem gost-ci-php com PHP 8.4, Composer e extensões de QA (resolves #7)
