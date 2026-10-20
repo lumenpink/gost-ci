@@ -15,7 +15,7 @@ Este projeto adota a norma **[GOST](https://codeberg.org/lumenpink/gost)** (Gosp
 | Imagem | Base | Ambiente & Versões | Propósito Principal |
 | :--- | :--- | :--- | :--- |
 | **`gost-ci-rust`** | `node:24-bookworm-slim` | Rust `1.98.1` (stable), `cargo`, `rustfmt`, `clippy`, `build-essential`, `git` | Pipeline de verificação: `cargo check`, `cargo test`, `fmt` e `clippy` |
-| **`gost-ci-cross`** | `node:24-bookworm-slim` | Rust `1.98.1`, targets `x86_64`, `i686`, `armv7` + `gcc-multilib`, `gcc-arm-linux-gnueabihf`, `tar` | Compilação cruzada e empacotamento multi-arquitetura (`build-release`, `publish-nightly`) |
+| **`gost-ci-cross`** | `node:24-bookworm-slim` | Rust `1.98.1`, targets `x86_64` (gnu/musl), `aarch64` (gnu/musl), `windows` (mingw), `i686`, `armv7` + `musl-tools`, `cargo-zigbuild`, `zig` | Compilação cruzada e empacotamento multi-arquitetura soberano (`build-release`, `publish-nightly`) |
 | **`gost-ci-deploy`** | `node:24-bookworm-slim` | Node.js `24`, `npm`, `wrangler@latest`, `git`, `curl` | Entrega de documentação e sites estáticos (Cloudflare Workers / Codeberg Pages) |
 | **`gost-ci-wasm`** | `node:24-bookworm-slim` | Rust `1.98.1`, target `wasm32-unknown-unknown`, `wasm-pack` `v0.13.1` | Compilação hermética de aplicações WebAssembly (`navalha`, `kokorosim`) |
 | **`gost-ci-shell`** | `node:24-bookworm-slim` | `shellspec` `0.28.1`, `shfmt` `v3.10.0`, `shellcheck`, `bash`, `git`, `jq` | Testes BDD e análise estática hermética de scripts shell (`cccp`) |
@@ -55,8 +55,12 @@ jobs:
         uses: https://github.com/actions/checkout@v4
       - name: "Build Multi-Target"
         run: |
-          cargo build --release --target i686-unknown-linux-gnu
-          cargo build --release --target armv7-unknown-linux-gnueabihf
+          # Linux x86_64 Estático
+          cargo build --release --target x86_64-unknown-linux-musl
+          # Linux ARM64 Estático
+          cargo build --release --target aarch64-unknown-linux-musl
+          # Windows x86_64
+          cargo build --release --target x86_64-pc-windows-gnu
 ```
 
 ### 3. Deploy de Documentação & WebApps (`gost-ci-deploy`)
