@@ -33,7 +33,7 @@ jobs:
     name: "Rust — Tests & Checks"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-rust:latest
+      image: docker.io/lumenpink/gost-ci-rust:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -49,7 +49,7 @@ jobs:
     name: "Rust — Release Binaries"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-cross:latest
+      image: docker.io/lumenpink/gost-ci-cross:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -71,7 +71,7 @@ jobs:
     name: "Deploy Documentation Site"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-deploy:latest
+      image: docker.io/lumenpink/gost-ci-deploy:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -87,7 +87,7 @@ jobs:
     name: "Build Wasm Bundle"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-wasm:latest
+      image: docker.io/lumenpink/gost-ci-wasm:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -103,7 +103,7 @@ jobs:
     name: "Shell Quality & Spec"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-shell:latest
+      image: docker.io/lumenpink/gost-ci-shell:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -121,7 +121,7 @@ jobs:
     name: "PHP 8.4 Tests"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-php:latest
+      image: docker.io/lumenpink/gost-ci-php:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4
@@ -139,7 +139,7 @@ jobs:
     name: "Rust GUI Desktop"
     runs-on: ubuntu-latest
     container:
-      image: codeberg.org/lumenpink/gost-ci-gui:latest
+      image: docker.io/lumenpink/gost-ci-gui:latest
     steps:
       - name: "Checkout"
         uses: https://github.com/actions/checkout@v4

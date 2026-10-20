@@ -1,4 +1,4 @@
-FROM codeberg.org/lumenpink/gost-ci-rust:latest
+FROM docker.io/lumenpink/gost-ci-rust:latest
 
 # Pré-carregar dependências canônicas do Lauda (ishcondidim, papeli, urupema)
 # para garantir testes herméticos sem acesso à rede em tempo de CI

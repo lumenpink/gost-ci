@@ -22,7 +22,7 @@ grep -q "flutter precache" "$DOCKERFILE" || { echo "FALHA: Precache do Flutter a
 
 # 3. Validação do Workflow de CI
 grep -q "build-flutter" "$WORKFLOW" || { echo "FALHA: Job build-flutter ausente no workflow de CI" >&2; exit 1; }
-grep -q "codeberg.org/lumenpink/gost-ci-flutter" "$WORKFLOW" || { echo "FALHA: Destino da imagem no Codeberg ausente no CI" >&2; exit 1; }
+grep -q "docker.io/lumenpink/gost-ci-flutter" "$WORKFLOW" || { echo "FALHA: Destino da imagem no Docker Hub ausente no CI" >&2; exit 1; }
 
 # 4. Validação do README
 grep -q "gost-ci-flutter" "$README" || { echo "FALHA: Imagem não documentada no README.md" >&2; exit 1; }

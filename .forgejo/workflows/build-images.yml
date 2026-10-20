@@ -23,8 +23,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-rust:latest --destination=codeberg.org/lumenpink/gost-ci-rust:1.98.1"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=docker.io/lumenpink/gost-ci-rust:latest --destination=docker.io/lumenpink/gost-ci-rust:1.98.1"
 
   build-cross:
     name: "Build & Push gost-ci-cross"
@@ -39,8 +39,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-cross:latest --destination=codeberg.org/lumenpink/gost-ci-cross:1.98.1"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=docker.io/lumenpink/gost-ci-cross:latest --destination=docker.io/lumenpink/gost-ci-cross:1.98.1"
 
   build-deploy:
     name: "Build & Push gost-ci-deploy"
@@ -55,8 +55,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-deploy:latest --destination=codeberg.org/lumenpink/gost-ci-deploy:node24"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=docker.io/lumenpink/gost-ci-deploy:latest --destination=docker.io/lumenpink/gost-ci-deploy:node24"
 
   build-wasm:
     name: "Build & Push gost-ci-wasm"
@@ -71,8 +71,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-wasm:latest --destination=codeberg.org/lumenpink/gost-ci-wasm:1.98.1"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=docker.io/lumenpink/gost-ci-wasm:latest --destination=docker.io/lumenpink/gost-ci-wasm:1.98.1"
 
   build-shell:
     name: "Build & Push gost-ci-shell"
@@ -87,8 +87,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-shell:latest --destination=codeberg.org/lumenpink/gost-ci-shell:0.28.1"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=docker.io/lumenpink/gost-ci-shell:latest --destination=docker.io/lumenpink/gost-ci-shell:0.28.1"
 
   build-php:
     name: "Build & Push gost-ci-php"
@@ -103,8 +103,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-php:latest --destination=codeberg.org/lumenpink/gost-ci-php:8.4"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=docker.io/lumenpink/gost-ci-php:latest --destination=docker.io/lumenpink/gost-ci-php:8.4"
 
   build-gui:
     name: "Build & Push gost-ci-gui"
@@ -119,8 +119,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-gui:latest --destination=codeberg.org/lumenpink/gost-ci-gui:1.98.1"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=docker.io/lumenpink/gost-ci-gui:latest --destination=docker.io/lumenpink/gost-ci-gui:1.98.1"
 
   build-lauda:
     name: "Build & Push gost-ci-lauda"
@@ -136,8 +136,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-lauda:latest"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=docker.io/lumenpink/gost-ci-lauda:latest"
 
   build-banca:
     name: "Build & Push gost-ci-banca"
@@ -152,8 +152,8 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-banca:latest"
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=docker.io/lumenpink/gost-ci-banca:latest"
 
   build-flutter:
     name: "Build & Push gost-ci-flutter"
@@ -168,6 +168,5 @@ jobs:
           entrypoint: /busybox/sh
           args: >-
             -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"codeberg.org\":{\"auth\":\"'$(echo -n "${{ github.actor }}:${{ secrets.CODEBERG_TOKEN || secrets.GITHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=codeberg.org/lumenpink/gost-ci-flutter:latest"
-
+            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=docker.io/lumenpink/gost-ci-flutter:latest"
