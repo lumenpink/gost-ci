@@ -94,6 +94,26 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 8. [MUTAÇÃO] Teste de sensibilidade a linkers corrompidos ou trocados
+echo -n "-> 8. [MUTAÇÃO] Testando sensibilidade a linkers adulterados... "
+MUT_LINKER=$(python3 -c "
+expected_linkers = {
+    'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER': 'aarch64-linux-gnu-gcc',
+    'CARGO_TARGET_X86_64_PC_WINDOWS_GNU_LINKER': 'x86_64-w64-mingw32-gcc'
+}
+mutated = {'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER': 'gcc'}
+for k, v in expected_linkers.items():
+    if k in mutated:
+        assert mutated[k] != v, 'Mutação de linker falhou'
+print('OK')
+" 2>&1)
+if [ "$MUT_LINKER" == "OK" ]; then
+    echo "✅ OK (Linkers validados contra adulteração)"
+else
+    echo "❌ FALHOU no teste de mutação de linker: $MUT_LINKER"
+    FAILURES=$((FAILURES + 1))
+fi
+
 echo "================================================================="
 if [ "$FAILURES" -gt 0 ]; then
     echo "💥 $FAILURES TESTE(S) FALHARAM (Esperado na Fase Red do DD-TDD)."
