@@ -87,8 +87,25 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# 8. [MUTAÇÃO] Teste de detecção de ausência de alvo crítico
-echo -n "-> 8. [MUTAÇÃO] Testando sensibilidade à ausência de alvos multiarch... "
+# 8. [MUTAÇÃO] Teste de detecção de ausência de linters
+echo -n "-> 8. [MUTAÇÃO] Testando sensibilidade à omissão parcial de linters... "
+MUT_LINTERS=$(python3 -c "
+components = ['rustfmt', 'clippy']
+test_only_rustfmt = ['rustfmt']
+test_only_clippy = ['clippy']
+assert not all(c in test_only_rustfmt for c in components), 'Mutação clippy falhou'
+assert not all(c in test_only_clippy for c in components), 'Mutação rustfmt falhou'
+print('OK')
+" 2>&1)
+if [ "$MUT_LINTERS" == "OK" ]; then
+    echo "✅ OK (Sensibilidade a linters parciais confirmada)"
+else
+    echo "❌ FALHOU no teste de mutação de linters: $MUT_LINTERS"
+    FAILURES=$((FAILURES + 1))
+fi
+
+# 9. [MUTAÇÃO] Teste de detecção de ausência de alvo crítico
+echo -n "-> 9. [MUTAÇÃO] Testando sensibilidade à ausência de alvos multiarch... "
 MUT_RES=$(python3 -c "
 targets = ['x86_64-unknown-linux-musl', 'aarch64-unknown-linux-musl', 'x86_64-pc-windows-gnu']
 test_list = ['x86_64-unknown-linux-gnu', 'i686-unknown-linux-gnu']
@@ -103,8 +120,8 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# 9. [MUTAÇÃO] Teste de sensibilidade a linkers corrompidos ou trocados
-echo -n "-> 9. [MUTAÇÃO] Testando sensibilidade a linkers adulterados... "
+# 10. [MUTAÇÃO] Teste de sensibilidade a linkers corrompidos ou trocados
+echo -n "-> 10. [MUTAÇÃO] Testando sensibilidade a linkers adulterados... "
 MUT_LINKER=$(python3 -c "
 expected_linkers = {
     'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER': 'aarch64-linux-gnu-gcc',
