@@ -68,9 +68,9 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# 5b. Validação de bibliotecas de desenvolvimento Desktop/GUI (#16)
-echo -n "-> 5b. Verificando bibliotecas de desenvolvimento Desktop/GUI (glib, webkit2gtk, asound)... "
-if grep -q "libglib2.0-dev" "$DOCKERFILE" && grep -q "libwebkit2gtk-4.1-dev" "$DOCKERFILE" && grep -q "libasound2-dev" "$DOCKERFILE"; then
+# 5b. Validação de bibliotecas de desenvolvimento Desktop/GUI (#16, #17)
+echo -n "-> 5b. Verificando bibliotecas de desenvolvimento Desktop/GUI (glib, webkit2gtk, asound, xdo)... "
+if grep -q "libglib2.0-dev" "$DOCKERFILE" && grep -q "libwebkit2gtk-4.1-dev" "$DOCKERFILE" && grep -q "libasound2-dev" "$DOCKERFILE" && grep -q "libxdo-dev" "$DOCKERFILE"; then
     echo "✅ OK"
 else
     echo "❌ FALHOU (bibliotecas GUI ausentes no Dockerfile)"
@@ -80,7 +80,7 @@ fi
 # 5c. [MUTAÇÃO] Sensibilidade a ausência de bibliotecas individuais GUI
 echo -n "-> 5c. [MUTAÇÃO] Testando sensibilidade à omissão parcial de libs GUI... "
 MUT_GUI=$(python3 -c "
-libs = ['libglib2.0-dev', 'libwebkit2gtk-4.1-dev', 'libasound2-dev']
+libs = ['libglib2.0-dev', 'libwebkit2gtk-4.1-dev', 'libasound2-dev', 'libxdo-dev']
 for lib in libs:
     test_sub = [x for x in libs if x != lib]
     assert not all(l in test_sub for l in libs), f'Mutação {lib} falhou'

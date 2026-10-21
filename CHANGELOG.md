@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (images) adicionar libxdo-dev nas imagens cross e gui para linkagem desktop (closes #17)
   - (ci) atualizar rust para 1.99.1 e incluir bibliotecas desktop gui (closes #16)
   - (cross) incluir rustfmt e clippy hermeticos na imagem gost-ci-cross (closes #15)
   - (ci) migrar publicacao de containers para Docker Hub (closes #14)

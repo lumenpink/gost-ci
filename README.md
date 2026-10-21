@@ -14,13 +14,13 @@ Este projeto adota a norma **[GOST](https://codeberg.org/lumenpink/gost)** (Gosp
 
 | Imagem | Base | Ambiente & Versões | Propósito Principal |
 | :--- | :--- | :--- | :--- |
-| **`gost-ci-rust`** | `node:24-bookworm-slim` | Rust `1.98.1` (stable), `cargo`, `rustfmt`, `clippy`, `build-essential`, `git` | Pipeline de verificação: `cargo check`, `cargo test`, `fmt` e `clippy` |
-| **`gost-ci-cross`** | `node:24-bookworm-slim` | Rust `1.98.1`, targets `x86_64` (gnu/musl), `aarch64` (gnu/musl), `windows` (mingw), `i686`, `armv7` + `musl-tools`, `cargo-zigbuild`, `zig` | Compilação cruzada e empacotamento multi-arquitetura soberano (`build-release`, `publish-nightly`) |
+| **`gost-ci-rust`** | `node:24-bookworm-slim` | Rust `1.99.1` (stable), `cargo`, `rustfmt`, `clippy`, `build-essential`, `git` | Pipeline de verificação: `cargo check`, `cargo test`, `fmt` e `clippy` |
+| **`gost-ci-cross`** | `node:24-bookworm-slim` | Rust `1.99.1`, targets `x86_64` (gnu/musl), `aarch64` (gnu/musl), `windows` (mingw), `i686`, `armv7` + `musl-tools`, `cargo-zigbuild`, `zig`, `libglib2.0-dev`, `libwebkit2gtk-4.1-dev`, `libasound2-dev`, `libxdo-dev` | Compilação cruzada e empacotamento multi-arquitetura soberano (`build-release`, `publish-nightly`) |
 | **`gost-ci-deploy`** | `node:24-bookworm-slim` | Node.js `24`, `npm`, `wrangler@latest`, `git`, `curl` | Entrega de documentação e sites estáticos (Cloudflare Workers / Codeberg Pages) |
-| **`gost-ci-wasm`** | `node:24-bookworm-slim` | Rust `1.98.1`, target `wasm32-unknown-unknown`, `wasm-pack` `v0.13.1` | Compilação hermética de aplicações WebAssembly (`navalha`, `kokorosim`) |
+| **`gost-ci-wasm`** | `node:24-bookworm-slim` | Rust `1.99.1`, target `wasm32-unknown-unknown`, `wasm-pack` `v0.13.1` | Compilação hermética de aplicações WebAssembly (`navalha`, `kokorosim`) |
 | **`gost-ci-shell`** | `node:24-bookworm-slim` | `shellspec` `0.28.1`, `shfmt` `v3.10.0`, `shellcheck`, `bash`, `git`, `jq` | Testes BDD e análise estática hermética de scripts shell (`cccp`) |
 | **`gost-ci-php`** | `php:8.4-cli` | PHP `8.4`, `composer:2`, extensões (`gd`, `zip`, `exif`, `sqlite3`, `pcntl`, `intl`), `xdebug`, Node `22` | Testes unitários (Pest), análise de código (Pint, Psalm) e auditoria (`indieinabox`, `fuxico`) |
-| **`gost-ci-gui`** | `node:24-bookworm-slim` | Rust `1.98.1`, `libwebkit2gtk-4.1-dev`, `libasound2-dev`, `build-essential` | Compilação e testes de aplicações desktop Linux (`lacraia`) |
+| **`gost-ci-gui`** | `node:24-bookworm-slim` | Rust `1.99.1`, `libglib2.0-dev`, `libwebkit2gtk-4.1-dev`, `libasound2-dev`, `libxdo-dev`, `build-essential` | Compilação e testes de aplicações desktop Linux (`lacraia`) |
 | **`gost-ci-flutter`** | `debian:bookworm-slim` | Flutter `stable`, OpenJDK `17`, Android SDK `34`, `build-tools;34.0.0` | Compilação hermética e determinística de APKs Android/Flutter (`mocambo`) |
 
 ## 🛠️ Como Consumir em Workflows Forgejo / GitHub Actions

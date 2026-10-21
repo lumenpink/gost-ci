@@ -39,6 +39,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libglib2.0-dev \
     libwebkit2gtk-4.1-dev \
     libasound2-dev \
+    libxdo-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --no-cache-dir --break-system-packages cargo-zigbuild ziglang || \
