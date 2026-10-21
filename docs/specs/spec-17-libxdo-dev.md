@@ -20,3 +20,8 @@ Conforme as diretrizes GOST de esteira hermética e atômica, é expressamente v
 2. O Dockerfile de `cross` e de `gui` incluem `libxdo-dev`.
 3. Teste de mutação confirmando a sensibilidade à ausência de `libxdo-dev`.
 4. Conformidade estrita GOST através de `cccp check --strict`.
+
+## 4. Evidências de Validação
+- Ambos os testes `tests/test-cross-multiarch.sh` e `tests/test-libxdo-desktop.sh` executados com sucesso (100% aprovados).
+- Sensibilidade a mutações testada e aprovada para ausência parcial de bibliotecas desktop e xdo.
+
