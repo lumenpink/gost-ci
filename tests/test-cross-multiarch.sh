@@ -68,6 +68,24 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 5b. Validação de bibliotecas de desenvolvimento Desktop/GUI (#16)
+echo -n "-> 5b. Verificando bibliotecas de desenvolvimento Desktop/GUI (glib, webkit2gtk, asound)... "
+if grep -q "libglib2.0-dev" "$DOCKERFILE" && grep -q "libwebkit2gtk-4.1-dev" "$DOCKERFILE" && grep -q "libasound2-dev" "$DOCKERFILE"; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (bibliotecas GUI ausentes no Dockerfile)"
+    FAILURES=$((FAILURES + 1))
+fi
+
+# 5c. Validação de versão mais recente do Rust 1.99.1 (#16)
+echo -n "-> 5c. Verificando toolchain Rust 1.99.1... "
+if grep -q "RUST_VERSION=1.99.1" "$DOCKERFILE"; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (RUST_VERSION não está em 1.99.1)"
+    FAILURES=$((FAILURES + 1))
+fi
+
 # 6. Validação dos Cargo Linkers via ENV
 echo -n "-> 6. Verificando variáveis de ambiente de linker do Cargo... "
 if grep -q "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER" "$DOCKERFILE" && \
