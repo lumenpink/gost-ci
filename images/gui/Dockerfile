@@ -13,8 +13,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     pkg-config \
     libssl-dev \
+    libglib2.0-dev \
     libwebkit2gtk-4.1-dev \
     libasound2-dev \
+    libxdo-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- \
