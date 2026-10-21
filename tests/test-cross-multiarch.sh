@@ -78,8 +78,17 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# 7. [MUTAÇÃO] Teste de detecção de ausência de alvo crítico
-echo -n "-> 7. [MUTAÇÃO] Testando sensibilidade à ausência de alvos multiarch... "
+# 7. Validação de rustfmt e clippy herméticos (#15)
+echo -n "-> 7. Verificando inclusão de rustfmt e clippy em images/cross/Dockerfile... "
+if grep -q "rustup component add.*rustfmt" "$DOCKERFILE" && grep -q "rustup component add.*clippy" "$DOCKERFILE"; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (rustfmt ou clippy ausentes no Dockerfile)"
+    FAILURES=$((FAILURES + 1))
+fi
+
+# 8. [MUTAÇÃO] Teste de detecção de ausência de alvo crítico
+echo -n "-> 8. [MUTAÇÃO] Testando sensibilidade à ausência de alvos multiarch... "
 MUT_RES=$(python3 -c "
 targets = ['x86_64-unknown-linux-musl', 'aarch64-unknown-linux-musl', 'x86_64-pc-windows-gnu']
 test_list = ['x86_64-unknown-linux-gnu', 'i686-unknown-linux-gnu']
@@ -94,8 +103,8 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# 8. [MUTAÇÃO] Teste de sensibilidade a linkers corrompidos ou trocados
-echo -n "-> 8. [MUTAÇÃO] Testando sensibilidade a linkers adulterados... "
+# 9. [MUTAÇÃO] Teste de sensibilidade a linkers corrompidos ou trocados
+echo -n "-> 9. [MUTAÇÃO] Testando sensibilidade a linkers adulterados... "
 MUT_LINKER=$(python3 -c "
 expected_linkers = {
     'CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER': 'aarch64-linux-gnu-gcc',
