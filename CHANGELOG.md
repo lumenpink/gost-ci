@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (ci) atualizar rust para 1.99.1 e incluir bibliotecas desktop gui (closes #16)
   - (cross) incluir rustfmt e clippy hermeticos na imagem gost-ci-cross (closes #15)
   - (ci) migrar publicacao de containers para Docker Hub (closes #14)
   - (cross) adicionar suporte a alvos multiarch aarch64, musl e windows mingw (closes #13)
