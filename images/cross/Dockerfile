@@ -45,6 +45,7 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- \
     -y \
     --default-toolchain ${RUST_VERSION} \
     --profile minimal \
+    && rustup component add rustfmt clippy \
     && rustup target add x86_64-unknown-linux-gnu \
     && rustup target add x86_64-unknown-linux-musl \
     && rustup target add aarch64-unknown-linux-gnu \
