@@ -1,7 +1,7 @@
 FROM node:24-trixie-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV RUST_VERSION=1.98.1
+ENV RUST_VERSION=1.99.1
 ENV WASM_PACK_VERSION=v0.13.1
 ENV RUSTUP_HOME=/root/.rustup
 ENV CARGO_HOME=/root/.cargo

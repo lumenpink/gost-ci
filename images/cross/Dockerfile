@@ -1,7 +1,7 @@
 FROM node:24-bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV RUST_VERSION=1.98.1
+ENV RUST_VERSION=1.99.1
 ENV RUSTUP_HOME=/root/.rustup
 ENV CARGO_HOME=/root/.cargo
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -36,6 +36,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libc6-dev-arm64-cross \
     gcc-mingw-w64-x86-64 \
     mingw-w64-tools \
+    libglib2.0-dev \
+    libwebkit2gtk-4.1-dev \
+    libasound2-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --no-cache-dir --break-system-packages cargo-zigbuild ziglang || \

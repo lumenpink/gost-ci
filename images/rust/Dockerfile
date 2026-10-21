@@ -1,7 +1,7 @@
 FROM node:24-bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV RUST_VERSION=1.98.1
+ENV RUST_VERSION=1.99.1
 ENV RUSTUP_HOME=/root/.rustup
 ENV CARGO_HOME=/root/.cargo
 ENV PATH="/root/.cargo/bin:${PATH}"
