@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (cross) incluir rustfmt e clippy hermeticos na imagem gost-ci-cross (closes #15)
   - (ci) migrar publicacao de containers para Docker Hub (closes #14)
   - (cross) adicionar suporte a alvos multiarch aarch64, musl e windows mingw (closes #13)
   - (images) criar imagem gost-ci-gui com WebKitGTK e áudio para aplicações desktop (resolves #8)
