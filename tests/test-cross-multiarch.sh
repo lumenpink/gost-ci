@@ -77,8 +77,24 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# 5c. Validação de versão mais recente do Rust 1.99.1 (#16)
-echo -n "-> 5c. Verificando toolchain Rust 1.99.1... "
+# 5c. [MUTAÇÃO] Sensibilidade a ausência de bibliotecas individuais GUI
+echo -n "-> 5c. [MUTAÇÃO] Testando sensibilidade à omissão parcial de libs GUI... "
+MUT_GUI=$(python3 -c "
+libs = ['libglib2.0-dev', 'libwebkit2gtk-4.1-dev', 'libasound2-dev']
+for lib in libs:
+    test_sub = [x for x in libs if x != lib]
+    assert not all(l in test_sub for l in libs), f'Mutação {lib} falhou'
+print('OK')
+" 2>&1)
+if [ "$MUT_GUI" == "OK" ]; then
+    echo "✅ OK (Sensibilidade a libs GUI parciais confirmada)"
+else
+    echo "❌ FALHOU na mutação de libs GUI: $MUT_GUI"
+    FAILURES=$((FAILURES + 1))
+fi
+
+# 5d. Validação de versão mais recente do Rust 1.99.1 (#16)
+echo -n "-> 5d. Verificando toolchain Rust 1.99.1... "
 if grep -q "RUST_VERSION=1.99.1" "$DOCKERFILE"; then
     echo "✅ OK"
 else
