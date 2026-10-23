@@ -24,3 +24,9 @@ Conforme as diretrizes GOST de esteira hermética e canônica, é expressamente 
 2. Todos os quatro Dockerfiles declaram a instalação canônica do `sccache`.
 3. Teste de mutação confirmando a sensibilidade à ausência de `sccache`.
 4. Conformidade estrita GOST através de `cccp check --strict`.
+
+## 4. Evidências de Validação
+- Teste automatizado `tests/test-sccache.sh` executado e aprovado com 100% de sucesso.
+- Validação de mutação aprovada para ausência na lista de ferramentas base.
+- Instalação canônica declarada de forma consistente em `images/rust/Dockerfile`, `images/wasm/Dockerfile`, `images/cross/Dockerfile` e `images/gui/Dockerfile`.
+
