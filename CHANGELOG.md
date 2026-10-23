@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (packages) auditar e garantir versao canonica nos workflows (closes #18)
   - (images) adicionar sccache v0.18.0 nas imagens rust, wasm, cross e gui (closes #20)
   - (images) adicionar libxdo-dev nas imagens cross e gui para linkagem desktop (closes #17)
   - (ci) atualizar rust para 1.99.1 e incluir bibliotecas desktop gui (closes #16)
