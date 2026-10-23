@@ -27,4 +27,11 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- \
     && rustc --version \
     && cargo --version
 
+ENV SCCACHE_VERSION=v0.18.0
+
+RUN curl -fsSL "https://github.com/mozilla/sccache/releases/download/${SCCACHE_VERSION}/sccache-${SCCACHE_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+    | tar -xz -C /usr/local/bin --strip-components=1 "sccache-${SCCACHE_VERSION}-x86_64-unknown-linux-musl/sccache" \
+    && chmod +x /usr/local/bin/sccache \
+    && sccache --version
+
 CMD ["bash"]
