@@ -67,4 +67,8 @@ RUN curl -fsSL "https://github.com/mozilla/sccache/releases/download/${SCCACHE_V
     && chmod +x /usr/local/bin/sccache \
     && sccache --version
 
+ENV RUSTC_WRAPPER=/usr/local/bin/sccache
+ENV SCCACHE_DIR=/root/.cache/sccache
+ENV SCCACHE_CACHE_SIZE=50G
+
 CMD ["bash"]

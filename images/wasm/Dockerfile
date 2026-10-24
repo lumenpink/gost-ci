@@ -65,4 +65,8 @@ RUN npm install -g wrangler esbuild \
     && wrangler --version \
     && esbuild --version
 
+ENV RUSTC_WRAPPER=/usr/local/bin/sccache
+ENV SCCACHE_DIR=/root/.cache/sccache
+ENV SCCACHE_CACHE_SIZE=50G
+
 CMD ["bash"]
