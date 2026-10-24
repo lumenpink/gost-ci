@@ -15,112 +15,119 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=docker.io/lumenpink/gost-ci-rust:latest --destination=docker.io/lumenpink/gost-ci-rust:1.99.1"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-rust:latest --destination=gambi.2lp.in/lumen/gost-ci-rust:1.99.1"
 
   build-cross:
     name: "Build & Push gost-ci-cross"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=docker.io/lumenpink/gost-ci-cross:latest --destination=docker.io/lumenpink/gost-ci-cross:1.99.1"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-cross:latest --destination=gambi.2lp.in/lumen/gost-ci-cross:1.99.1"
 
   build-deploy:
     name: "Build & Push gost-ci-deploy"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=docker.io/lumenpink/gost-ci-deploy:latest --destination=docker.io/lumenpink/gost-ci-deploy:node24"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-deploy:latest --destination=gambi.2lp.in/lumen/gost-ci-deploy:node24"
 
   build-wasm:
     name: "Build & Push gost-ci-wasm"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=docker.io/lumenpink/gost-ci-wasm:latest --destination=docker.io/lumenpink/gost-ci-wasm:1.99.1"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-wasm:latest --destination=gambi.2lp.in/lumen/gost-ci-wasm:1.99.1"
 
   build-shell:
     name: "Build & Push gost-ci-shell"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=docker.io/lumenpink/gost-ci-shell:latest --destination=docker.io/lumenpink/gost-ci-shell:0.28.1"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-shell:latest --destination=gambi.2lp.in/lumen/gost-ci-shell:0.28.1"
 
   build-php:
     name: "Build & Push gost-ci-php"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=docker.io/lumenpink/gost-ci-php:latest --destination=docker.io/lumenpink/gost-ci-php:8.4"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-php:latest --destination=gambi.2lp.in/lumen/gost-ci-php:8.4"
 
   build-gui:
     name: "Build & Push gost-ci-gui"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=docker.io/lumenpink/gost-ci-gui:latest --destination=docker.io/lumenpink/gost-ci-gui:1.99.1"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-gui:latest --destination=gambi.2lp.in/lumen/gost-ci-gui:1.99.1"
 
   build-lauda:
     name: "Build & Push gost-ci-lauda"
@@ -128,45 +135,48 @@ jobs:
     needs: [build-rust]
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=docker.io/lumenpink/gost-ci-lauda:latest --destination=docker.io/lumenpink/gost-ci-lauda:1.99.1"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-lauda:latest --destination=gambi.2lp.in/lumen/gost-ci-lauda:1.99.1"
 
   build-banca:
     name: "Build & Push gost-ci-banca"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=docker.io/lumenpink/gost-ci-banca:latest --destination=docker.io/lumenpink/gost-ci-banca:node24"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-banca:latest --destination=gambi.2lp.in/lumen/gost-ci-banca:node24"
 
   build-flutter:
     name: "Build & Push gost-ci-flutter"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: https://github.com/actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Build & Push Kaniko
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
           args: >-
-            -c "mkdir -p /kaniko/.docker &&
-            echo '{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"'$(echo -n "${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=docker.io/lumenpink/gost-ci-flutter:latest --destination=docker.io/lumenpink/gost-ci-flutter:android34"
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-flutter:latest --destination=gambi.2lp.in/lumen/gost-ci-flutter:android34"
