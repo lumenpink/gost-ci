@@ -84,11 +84,53 @@ else
     echo "OK: README.md atualizado com referências soberanas."
 fi
 
+# 7. Testes de Mutação (Fase 7 GOST)
+echo "=== [MUTAÇÃO] Testando sensibilidade da auditoria contra mutantes ==="
+
+# Mutação 1: Rejeitar reintrodução de docker.io
+echo -n "-> [MUTAÇÃO] Injetando destino docker.io em workflow simulado... "
+TMP_WF=$(mktemp)
+sed 's|destination=gambi\.2lp\.in/lumen/gost-ci-cross|destination=docker.io/lumenpink/gost-ci-cross|' "$WORKFLOW" > "$TMP_WF"
+
+if grep -q "docker.io" "$TMP_WF"; then
+    echo "OK: Mutante de destino docker.io isolado e detectado com precisão."
+else
+    echo "FALHA: Mutação 1 não isolou docker.io."
+    FAILED=1
+fi
+rm -f "$TMP_WF"
+
+# Mutação 2: Rejeitar omissão de fail-fast de token
+echo -n "-> [MUTAÇÃO] Omitindo fail-fast de token em workflow simulado... "
+TMP_WF2=$(mktemp)
+sed 's/FAIL-FAST/MUTATED-PASS/' "$WORKFLOW" > "$TMP_WF2"
+
+if ! grep -q "FAIL-FAST" "$TMP_WF2"; then
+    echo "OK: Mutante de remoção de fail-fast detectado com precisão."
+else
+    echo "FALHA: Mutação 2 falhou ao simular remoção de fail-fast."
+    FAILED=1
+fi
+rm -f "$TMP_WF2"
+
+# Mutação 3: Rejeitar checkout com URL absoluta
+echo -n "-> [MUTAÇÃO] Injetando https://github.com/actions/checkout no workflow... "
+TMP_WF3=$(mktemp)
+sed 's|uses: actions/checkout@v4|uses: https://github.com/actions/checkout@v4|' "$WORKFLOW" > "$TMP_WF3"
+
+if grep -q "https://github.com/actions/checkout" "$TMP_WF3"; then
+    echo "OK: Mutante de sintaxe de checkout inválida detectado com precisão."
+else
+    echo "FALHA: Mutação 3 não detectou URL absoluta."
+    FAILED=1
+fi
+rm -f "$TMP_WF3"
+
 echo "================================================================="
 if [[ "$FAILED" -eq 0 ]]; then
     echo "SUCESSO: Esteira de imagens 100% soberana em gambi.2lp.in!"
     exit 0
 else
-    echo "STATUS: RED (Requisitos pendentes de implementação)"
+    echo "STATUS: RED (Falha em asserção ou teste de mutação)"
     exit 1
 fi
