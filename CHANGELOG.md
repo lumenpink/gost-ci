@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (wasm) pre-instalar wasm-bindgen, wasm-opt e esbuild (closes #22)
   - (ci) publicar no registry gambi e remover dockerhub (closes #21)
   - (images) criar espelho de imagens upstream e referenciá-las (closes #23)
   - (docker) garantir tags canonicas para todas as imagens (closes #19)
