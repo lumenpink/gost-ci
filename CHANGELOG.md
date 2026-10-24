@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (images) criar espelho de imagens upstream e referenciá-las (closes #23)
   - (docker) garantir tags canonicas para todas as imagens (closes #19)
   - (packages) auditar e garantir versao canonica nos workflows (closes #18)
   - (images) adicionar sccache v0.18.0 nas imagens rust, wasm, cross e gui (closes #20)
