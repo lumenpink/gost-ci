@@ -39,6 +39,21 @@ RUN curl -fsSL "https://github.com/rustwasm/wasm-pack/releases/download/${WASM_P
     && chmod +x /usr/local/bin/wasm-pack \
     && wasm-pack --version
 
+ENV WASM_BINDGEN_VERSION=0.2.129
+
+RUN curl -fsSL "https://github.com/wasm-bindgen/wasm-bindgen/releases/download/${WASM_BINDGEN_VERSION}/wasm-bindgen-${WASM_BINDGEN_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+    | tar -xz -C /usr/local/bin --strip-components=1 "wasm-bindgen-${WASM_BINDGEN_VERSION}-x86_64-unknown-linux-musl/wasm-bindgen" \
+    && chmod +x /usr/local/bin/wasm-bindgen \
+    && ln -sf /usr/local/bin/wasm-bindgen /root/.cargo/bin/wasm-bindgen \
+    && wasm-bindgen --version
+
+ENV BINARYEN_VERSION=version_122
+
+RUN curl -fsSL "https://github.com/WebAssembly/binaryen/releases/download/${BINARYEN_VERSION}/binaryen-${BINARYEN_VERSION}-x86_64-linux.tar.gz" \
+    | tar -xz -C /usr/local/bin --strip-components=2 "binaryen-${BINARYEN_VERSION}/bin/wasm-opt" \
+    && chmod +x /usr/local/bin/wasm-opt \
+    && wasm-opt --version
+
 ENV DIOXUS_VERSION=v0.7.10
 
 RUN curl -fsSL "https://github.com/DioxusLabs/dioxus/releases/download/${DIOXUS_VERSION}/dx-x86_64-unknown-linux-gnu.tar.gz" \
@@ -46,8 +61,8 @@ RUN curl -fsSL "https://github.com/DioxusLabs/dioxus/releases/download/${DIOXUS_
     && chmod +x /usr/local/bin/dx \
     && dx --version
 
-RUN npm install -g wrangler \
-    && wrangler --version
+RUN npm install -g wrangler esbuild \
+    && wrangler --version \
+    && esbuild --version
 
 CMD ["bash"]
-
