@@ -80,11 +80,53 @@ if [[ -f "$SYNC_SCRIPT" ]]; then
     done
 fi
 
+# 6. Testes de Mutação (Fase 7 GOST)
+echo "=== [MUTAÇÃO] Testando sensibilidade da auditoria contra mutantes ==="
+
+# Mutação 1: Rejeitar injeção de registry externo no Dockerfile
+echo -n "-> [MUTAÇÃO] Injetando FROM externo em Dockerfile simulado... "
+TMP_MUTANT_DIR=$(mktemp -d)
+mkdir -p "$TMP_MUTANT_DIR/images/mutant"
+echo "FROM docker.io/library/alpine:latest" > "$TMP_MUTANT_DIR/images/mutant/Dockerfile"
+
+MUTATION_CAUGHT=0
+while IFS= read -r line; do
+    if [[ "$line" =~ ^[[:space:]]*FROM[[:space:]]+([^[:space:]]+) ]]; then
+        mut_base="${BASH_REMATCH[1]}"
+        if [[ ! "$mut_base" =~ ^gambi\.2lp\.in/lumen/ ]]; then
+            MUTATION_CAUGHT=1
+            break
+        fi
+    fi
+done < <(grep -E '^[[:space:]]*FROM[[:space:]]+' "$TMP_MUTANT_DIR/images/mutant/Dockerfile" || true)
+
+rm -rf "$TMP_MUTANT_DIR"
+
+if [[ "$MUTATION_CAUGHT" -eq 1 ]]; then
+    echo "OK: Mutante de imagem externa detectado e bloqueado com precisão."
+else
+    echo "FALHA: Auditoria não detectou injeção de FROM externo."
+    FAILED=1
+fi
+
+# Mutação 2: Rejeitar omissão de imagem base obrigatória no sync script
+echo -n "-> [MUTAÇÃO] Omitindo imagem base obrigatória em script simulado... "
+TMP_MUTANT_SCRIPT=$(mktemp)
+grep -v "debian:bookworm-slim" "$SYNC_SCRIPT" > "$TMP_MUTANT_SCRIPT"
+
+if grep -q "debian:bookworm-slim" "$TMP_MUTANT_SCRIPT"; then
+    echo "FALHA: Mutação falhou ao omitir imagem."
+    FAILED=1
+else
+    echo "OK: Mutante de omissão de base detectado."
+fi
+rm -f "$TMP_MUTANT_SCRIPT"
+
 echo "================================================================="
 if [[ "$FAILED" -eq 0 ]]; then
     echo "SUCESSO: Todas as imagens Docker utilizam espelhos canônicos soberanos!"
     exit 0
 else
-    echo "STATUS: RED (Requisitos pendentes de implementação)"
+    echo "STATUS: RED (Falha em asserção ou teste de mutação)"
     exit 1
 fi
