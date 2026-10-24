@@ -1,0 +1,25 @@
+name: Sync Upstream Base Images
+
+on:
+  schedule:
+    # Executa semanalmente aos domingos às 03:00 UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: sync-mirrors
+  cancel-in-progress: true
+
+jobs:
+  sync-mirrors:
+    name: "Sync and Mirror Upstream Images"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Synchronize and Push Base Images to Sovereign Registry"
+        env:
+          GAMBI_2LP_IN_TOKEN: ${{ secrets.GAMBI_2LP_IN_TOKEN }}
+        run: |
+          ./scripts/sync-upstream-images.sh

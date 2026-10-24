@@ -33,10 +33,13 @@ else
 
     # 3. Validar fail-fast do script na ausência de GAMBI_2LP_IN_TOKEN
     echo -n "-> Testando fail-fast de GAMBI_2LP_IN_TOKEN... "
-    if env -u GAMBI_2LP_IN_TOKEN bash "$SYNC_SCRIPT" --dry-run >/dev/null 2>&1; then
+    TMP_EMPTY_HOME=$(mktemp -d)
+    if HOME="$TMP_EMPTY_HOME" env -u GAMBI_2LP_IN_TOKEN bash "$SYNC_SCRIPT" --dry-run >/dev/null 2>&1; then
+        rm -rf "$TMP_EMPTY_HOME"
         echo "FALHA: Script não abortou na ausência de GAMBI_2LP_IN_TOKEN."
         FAILED=1
     else
+        rm -rf "$TMP_EMPTY_HOME"
         echo "OK: Script aborta com erro quando token não é fornecido."
     fi
 fi

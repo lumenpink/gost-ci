@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM gambi.2lp.in/lumen/mirror-debian:bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ANDROID_HOME=/opt/android-sdk

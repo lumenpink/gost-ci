@@ -1,4 +1,4 @@
-FROM node:24-trixie-slim
+FROM gambi.2lp.in/lumen/mirror-node:24-trixie-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUST_VERSION=1.99.1

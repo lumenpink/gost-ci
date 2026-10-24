@@ -1,4 +1,4 @@
-FROM php:8.4-cli
+FROM gambi.2lp.in/lumen/mirror-php:8.4-cli
 
 ENV DEBIAN_FRONTEND=noninteractive
 
