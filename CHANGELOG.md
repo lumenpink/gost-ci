@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (ci) publicar no registry gambi e remover dockerhub (closes #21)
   - (images) criar espelho de imagens upstream e referenciá-las (closes #23)
   - (docker) garantir tags canonicas para todas as imagens (closes #19)
   - (packages) auditar e garantir versao canonica nos workflows (closes #18)
