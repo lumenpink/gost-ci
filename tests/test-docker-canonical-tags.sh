@@ -32,9 +32,10 @@ declare -A CANONICAL_TAGS=(
     ["gost-ci-lauda"]="1.99.1"
     ["gost-ci-banca"]="node24"
     ["gost-ci-flutter"]="android34"
+    ["gost-ci-android"]="ndk27-sdk34"
 )
 
-echo "-> Verificando presença de :latest e tag de versão canônica para as 10 imagens..."
+echo "-> Verificando presença de :latest e tag de versão canônica para as 11 imagens..."
 
 for img in "${!CANONICAL_TAGS[@]}"; do
     expected_ver="${CANONICAL_TAGS[$img]}"
@@ -94,6 +95,6 @@ if [ "$FAILURES" -gt 0 ]; then
     echo "💥 $FAILURES IMAGEM(NS) NÃO ATENDEM AOS CRITÉRIOS (Esperado na Fase Red do DD-TDD)."
     exit 1
 else
-    echo "🎉 TODAS AS 10 IMAGENS DOCKER POSSUEM TAGS CANÔNICAS CONFORMES!"
+    echo "🎉 TODAS AS 11 IMAGENS DOCKER POSSUEM TAGS CANÔNICAS CONFORMES!"
     exit 0
 fi

@@ -180,3 +180,20 @@ jobs:
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
             /kaniko/executor --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-flutter:latest --destination=gambi.2lp.in/lumen/gost-ci-flutter:android34"
+
+  build-android:
+    name: "Build & Push gost-ci-android"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build & Push Kaniko
+        uses: docker://gcr.io/kaniko-project/executor:debug
+        with:
+          entrypoint: /busybox/sh
+          args: >-
+            -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
+            mkdir -p /kaniko/.docker &&
+            echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
+            /kaniko/executor --context=dir://images/android --dockerfile=images/android/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-android:latest --destination=gambi.2lp.in/lumen/gost-ci-android:ndk27-sdk34"
