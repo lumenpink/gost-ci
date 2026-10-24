@@ -57,6 +57,8 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- \
     && rustup target add x86_64-pc-windows-gnu \
     && rustup target add i686-unknown-linux-gnu \
     && rustup target add armv7-unknown-linux-gnueabihf \
+    && rustup target add aarch64-linux-android \
+    && rustup target add x86_64-linux-android \
     && rustc --version \
     && cargo --version
 
