@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
     git \
+    openssh-client \
     build-essential \
     pkg-config \
     libssl-dev \
@@ -28,6 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     musl-tools \
     python3 \
     python3-pip \
+    python3-yaml \
     gcc-i686-linux-gnu \
     libc6-dev-i386-cross \
     gcc-arm-linux-gnueabihf \

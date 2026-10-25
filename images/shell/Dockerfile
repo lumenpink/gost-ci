@@ -7,6 +7,7 @@ ENV SHFMT_VERSION=v3.10.0
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     git \
+    openssh-client \
     file \
     curl \
     ca-certificates \
