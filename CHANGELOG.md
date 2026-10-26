@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (images) adicionar sub-imagens atomicas gost-ci-python e gost-ci-go (closes #28)
   - (wasm) pre-instalar wasm-bindgen, wasm-opt e esbuild (closes #22)
   - (ci) publicar no registry gambi e remover dockerhub (closes #21)
   - (images) criar espelho de imagens upstream e referenciá-las (closes #23)
