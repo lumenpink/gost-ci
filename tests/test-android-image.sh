@@ -60,4 +60,15 @@ echo "✓ Imagem gost-ci-android declarada no workflow build-images.yml"
 grep -q "gost-ci-android" "$TAGS_TEST" || { echo "❌ FALHA: gost-ci-android ausente em $TAGS_TEST"; exit 1; }
 echo "✓ Tags canônicas registradas em test-docker-canonical-tags.sh"
 
+# 9. Testes de Mutação (Fase 7 GOST)
+echo "=== [MUTAÇÃO] Testando sensibilidade contra regressão de imagem base sem Node ==="
+TMP_MUTANT=$(mktemp)
+trap 'rm -f "$TMP_MUTANT"' EXIT
+sed 's/mirror-node:24-trixie-slim/mirror-debian:trixie-slim/' "$DOCKERFILE" > "$TMP_MUTANT"
+if grep -q "FROM gambi.2lp.in/lumen/mirror-node:24-trixie-slim" "$TMP_MUTANT"; then
+    echo "❌ FALHA: Mutante com imagem sem Node passou despercebido!"
+    exit 1
+fi
+echo "✓ Mutante (reintrodução de imagem base sem Node) capturado com precisão."
+
 echo "🎉 [SUCESSO] Todos os critérios de conformidade da sub-imagem gost-ci-android foram atendidos!"
