@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixes
+  - (android) usar base soberana mirror-node trixie com node 24 nativo (#33)
+
 ### Features
   - (cross) adicionar cmake na imagem gost-ci-cross para libgit2 (closes #29)
   - (images) adicionar sub-imagens atomicas gost-ci-python e gost-ci-go (closes #28)
