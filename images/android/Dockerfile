@@ -1,11 +1,11 @@
-FROM gambi.2lp.in/lumen/mirror-debian:bookworm-slim
+FROM gambi.2lp.in/lumen/mirror-debian:trixie-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV RUST_VERSION=1.99.1
 ENV RUSTUP_HOME=/root/.rustup
 ENV CARGO_HOME=/root/.cargo
 
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_SDK_ROOT=/opt/android-sdk
 ENV ANDROID_NDK_VERSION=r27c
@@ -21,7 +21,7 @@ ENV DIOXUS_VERSION=v0.7.10
 
 ENV PATH=$JAVA_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/34.0.0:$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin:/root/.cargo/bin:$PATH
 
-# 1. Dependências do sistema operacional e Java 17 headless
+# 1. Dependências do sistema operacional e Java 21 headless
 RUN apt-get update && apt-get install -y --no-install-recommends \
     bash \
     curl \
@@ -34,7 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config \
     libssl-dev \
     ca-certificates \
-    openjdk-17-jdk-headless \
+    openjdk-21-jdk-headless \
     python3 \
     && rm -rf /var/lib/apt/lists/*
 

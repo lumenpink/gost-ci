@@ -46,6 +46,7 @@ declare -a MIRROR_MATRIX=(
     "node:24-bookworm-slim|mirror-node:24-bookworm-slim"
     "node:24-trixie-slim|mirror-node:24-trixie-slim"
     "debian:bookworm-slim|mirror-debian:bookworm-slim"
+    "debian:trixie-slim|mirror-debian:trixie-slim"
     "php:8.4-cli|mirror-php:8.4-cli"
 )
 
