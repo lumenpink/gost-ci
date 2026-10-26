@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     openssh-client \
     build-essential \
     pkg-config \
+    cmake \
     libssl-dev \
     tar \
     gzip \
