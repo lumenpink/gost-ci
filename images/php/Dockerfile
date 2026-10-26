@@ -9,6 +9,7 @@ COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
         unzip \
+        zip \
         curl \
         ca-certificates \
         jq \
@@ -17,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensões necessárias para testes, geração de assets e CLI
-RUN install-php-extensions gd zip exif sqlite3 pcntl intl
+RUN install-php-extensions gd zip exif sqlite3 pcntl intl gmp
 
 # Xdebug — instalado e configurado como off por padrão (ativável via XDEBUG_MODE=coverage)
 RUN pecl install xdebug \
