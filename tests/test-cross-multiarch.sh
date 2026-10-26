@@ -77,6 +77,15 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 5e. Validação de cmake para compilação C/libgit2 (#29)
+echo -n "-> 5e. Verificando suporte a cmake para libgit2 (#29)... "
+if grep -q "cmake" "$DOCKERFILE"; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (cmake ausente no Dockerfile)"
+    FAILURES=$((FAILURES + 1))
+fi
+
 # 5c. [MUTAÇÃO] Sensibilidade a ausência de bibliotecas individuais GUI
 echo -n "-> 5c. [MUTAÇÃO] Testando sensibilidade à omissão parcial de libs GUI... "
 MUT_GUI=$(python3 -c "
