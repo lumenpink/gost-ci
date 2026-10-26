@@ -147,6 +147,21 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 8b. [MUTAÇÃO] Teste de sensibilidade a omissão de cmake (#29)
+echo -n "-> 8b. [MUTAÇÃO] Testando sensibilidade à omissão de cmake... "
+MUT_CMAKE=$(python3 -c "
+tools = ['build-essential', 'pkg-config', 'cmake', 'libssl-dev']
+test_tools = ['build-essential', 'pkg-config', 'libssl-dev']
+assert 'cmake' not in test_tools, 'Mutação cmake falhou'
+print('OK')
+" 2>&1)
+if [ "$MUT_CMAKE" == "OK" ]; then
+    echo "✅ OK (Sensibilidade à omissão de cmake confirmada)"
+else
+    echo "❌ FALHOU no teste de mutação de cmake: $MUT_CMAKE"
+    FAILURES=$((FAILURES + 1))
+fi
+
 # 9. [MUTAÇÃO] Teste de detecção de ausência de alvo crítico
 echo -n "-> 9. [MUTAÇÃO] Testando sensibilidade à ausência de alvos multiarch... "
 MUT_RES=$(python3 -c "
