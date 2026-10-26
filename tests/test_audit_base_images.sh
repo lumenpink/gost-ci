@@ -71,7 +71,7 @@ done
 
 # 5. Validar que o script de sincronização lista a matriz canônica completa
 if [[ -f "$SYNC_SCRIPT" ]]; then
-    REQUIRED_BASES=("node:24-bookworm-slim" "node:24-trixie-slim" "debian:bookworm-slim" "php:8.4-cli")
+    REQUIRED_BASES=("node:24-bookworm-slim" "node:24-trixie-slim" "debian:bookworm-slim" "debian:trixie-slim" "php:8.4-cli")
     for base in "${REQUIRED_BASES[@]}"; do
         if ! grep -q "$base" "$SYNC_SCRIPT"; then
             echo "FALHA: Imagem base obrigatória '$base' não listada em $SYNC_SCRIPT."

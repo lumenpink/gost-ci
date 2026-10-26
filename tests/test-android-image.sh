@@ -19,6 +19,10 @@ if [ ! -f "$DOCKERFILE" ]; then
 fi
 echo "✓ Dockerfile presente em images/android/Dockerfile"
 
+# 1.1 Base Debian Trixie Soberana
+grep -q "FROM gambi.2lp.in/lumen/mirror-debian:trixie-slim" "$DOCKERFILE" || { echo "❌ FALHA: Base mirror-debian:trixie-slim ausente em $DOCKERFILE"; exit 1; }
+echo "✓ Imagem base soberana mirror-debian:trixie-slim configurada"
+
 # 2. Variáveis de ambiente canônicas do Android SDK e NDK
 grep -q "ENV ANDROID_HOME=/opt/android-sdk" "$DOCKERFILE" || { echo "❌ FALHA: ANDROID_HOME não definido em $DOCKERFILE"; exit 1; }
 grep -q "ENV ANDROID_NDK_HOME=" "$DOCKERFILE" || { echo "❌ FALHA: ANDROID_NDK_HOME não definido em $DOCKERFILE"; exit 1; }
