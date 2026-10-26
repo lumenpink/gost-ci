@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Features
+  - (cross) adicionar cmake na imagem gost-ci-cross para libgit2 (closes #29)
   - (images) adicionar sub-imagens atomicas gost-ci-python e gost-ci-go (closes #28)
   - (wasm) pre-instalar wasm-bindgen, wasm-opt e esbuild (closes #22)
   - (ci) publicar no registry gambi e remover dockerhub (closes #21)
