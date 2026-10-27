@@ -28,6 +28,8 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     gzip \
     zip \
     unzip \
+    sqlite3 \
+    libsqlite3-dev \
     musl-tools \
     python3 \
     python3-pip \
