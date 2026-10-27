@@ -36,6 +36,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     openjdk-21-jdk-headless \
     python3 \
+    python3-pil \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Instalação do Android SDK Command-Line Tools & Plataforma Android 34

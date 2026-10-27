@@ -23,6 +23,10 @@ echo "✓ Dockerfile presente em images/android/Dockerfile"
 grep -q "FROM gambi.2lp.in/lumen/mirror-node:24-trixie-slim" "$DOCKERFILE" || { echo "❌ FALHA: Base mirror-node:24-trixie-slim ausente em $DOCKERFILE"; exit 1; }
 echo "✓ Imagem base soberana mirror-node:24-trixie-slim configurada"
 
+# 1.2 Dependência de Imagem python3-pil (#34)
+grep -q "python3-pil" "$DOCKERFILE" || { echo "❌ FALHA: python3-pil ausente em $DOCKERFILE"; exit 1; }
+echo "✓ Pacote python3-pil configurado para geração de ícones Android"
+
 # 2. Variáveis de ambiente canônicas do Android SDK e NDK
 grep -q "ENV ANDROID_HOME=/opt/android-sdk" "$DOCKERFILE" || { echo "❌ FALHA: ANDROID_HOME não definido em $DOCKERFILE"; exit 1; }
 grep -q "ENV ANDROID_NDK_HOME=" "$DOCKERFILE" || { echo "❌ FALHA: ANDROID_NDK_HOME não definido em $DOCKERFILE"; exit 1; }
@@ -70,5 +74,13 @@ if grep -q "FROM gambi.2lp.in/lumen/mirror-node:24-trixie-slim" "$TMP_MUTANT"; t
     exit 1
 fi
 echo "✓ Mutante (reintrodução de imagem base sem Node) capturado com precisão."
+
+echo "=== [MUTAÇÃO] Testando sensibilidade contra ausência de python3-pil ==="
+sed '/python3-pil/d' "$DOCKERFILE" > "$TMP_MUTANT"
+if grep -q "python3-pil" "$TMP_MUTANT"; then
+    echo "❌ FALHA: Mutante sem python3-pil passou despercebido!"
+    exit 1
+fi
+echo "✓ Mutante (remoção de python3-pil) capturado com precisão."
 
 echo "🎉 [SUCESSO] Todos os critérios de conformidade da sub-imagem gost-ci-android foram atendidos!"
