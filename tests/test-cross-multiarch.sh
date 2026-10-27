@@ -86,6 +86,31 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 5f. Validação de utilitários SQLite (#36)
+echo -n "-> 5f. Verificando utilitário sqlite3 e libsqlite3-dev (#36)... "
+if grep -q "sqlite3" "$DOCKERFILE" && grep -q "libsqlite3-dev" "$DOCKERFILE"; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (sqlite3 ou libsqlite3-dev ausentes no Dockerfile)"
+    FAILURES=$((FAILURES + 1))
+fi
+
+# 5g. [MUTAÇÃO] Sensibilidade a ausência de sqlite3 (#36)
+echo -n "-> 5g. [MUTAÇÃO] Testando sensibilidade à omissão de sqlite3... "
+MUT_SQLITE=$(python3 -c "
+pkgs = ['sqlite3', 'libsqlite3-dev']
+for p in pkgs:
+    test_sub = [x for x in pkgs if x != p]
+    assert not all(x in test_sub for x in pkgs), f'Mutação {p} falhou'
+print('OK')
+" 2>&1)
+if [ "$MUT_SQLITE" == "OK" ]; then
+    echo "✅ OK (Sensibilidade a sqlite3 confirmada)"
+else
+    echo "❌ FALHOU na mutação de sqlite3: $MUT_SQLITE"
+    FAILURES=$((FAILURES + 1))
+fi
+
 # 5c. [MUTAÇÃO] Sensibilidade a ausência de bibliotecas individuais GUI
 echo -n "-> 5c. [MUTAÇÃO] Testando sensibilidade à omissão parcial de libs GUI... "
 MUT_GUI=$(python3 -c "
