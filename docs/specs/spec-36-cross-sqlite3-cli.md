@@ -23,9 +23,9 @@ Diversos fluxos de integração e verificação de infraestrutura soberana (como
 - [x] **Fase 1 - Ticket:** Criado ticket #36 no Forgejo (`lumen/gost-ci`).
 - [x] **Fase 2 - Branch:** Criada branch dedicada `feat/36-cross-sqlite3-cli`.
 - [x] **Fase 3 - Doc/Spec:** Especificação formal elaborada neste documento.
-- [ ] **Fase 4 - Red Test:** Asserção em `tests/test-cross-multiarch.sh` falha antes da alteração do Dockerfile.
-- [ ] **Fase 5 - Green Implement:** Pacotes `sqlite3` e `libsqlite3-dev` inseridos em `images/cross/Dockerfile`.
-- [ ] **Fase 6 - Refactor:** Alinhamento limpo da lista de dependências no Dockerfile.
-- [ ] **Fase 7 - Mutation Test:** Cobertura de rejeição caso `sqlite3` seja omitido.
+- [x] **Fase 4 - Red Test:** Asserção em `tests/test-cross-multiarch.sh` falha antes da alteração do Dockerfile.
+- [x] **Fase 5 - Green Implement:** Pacotes `sqlite3` e `libsqlite3-dev` inseridos em `images/cross/Dockerfile`.
+- [x] **Fase 6 - Refactor:** Alinhamento limpo da lista de dependências no Dockerfile.
+- [x] **Fase 7 - Mutation Test:** Cobertura de rejeição caso `sqlite3` seja omitido (passo 5g do teste).
 - [ ] **Fase 8 - Quality Gate:** Auditoria `cccp check --strict` e passagem da suíte de testes.
 - [ ] **Fase 9 - Close:** Fechamento e publicação da imagem atualizada.
