@@ -6,7 +6,8 @@ ENV RUSTUP_HOME=/root/.rustup
 ENV CARGO_HOME=/root/.cargo
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
     git \

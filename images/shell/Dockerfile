@@ -4,7 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV SHELLSPEC_VERSION=0.28.1
 ENV SHFMT_VERSION=v3.10.0
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && apt-get update && apt-get install -y --no-install-recommends \
     bash \
     git \
     openssh-client \

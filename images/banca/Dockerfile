@@ -7,7 +7,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # - openjdk-17-jdk-headless (jarsigner para assinatura de index-v1.jar)
 # - python3, python3-pil (geração do site e sanitização de ícones para 8-bit RGBA)
 # - aapt (extração determinística de metadados dos APKs)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && apt-get update && apt-get install -y --no-install-recommends \
     bash \
     git \
     file \

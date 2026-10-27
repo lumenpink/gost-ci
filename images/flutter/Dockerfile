@@ -7,7 +7,8 @@ ENV FLUTTER_HOME=/opt/flutter
 ENV PATH=$FLUTTER_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools/34.0.0:$PATH
 
 # 1. Dependências do sistema operacional
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && apt-get update && apt-get install -y --no-install-recommends \
     bash \
     curl \
     git \

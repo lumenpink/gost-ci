@@ -6,7 +6,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
 # Dependências de sistema e Node.js 22 LTS (para suporte hermético a actions no Forgejo/act)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && apt-get update && apt-get install -y --no-install-recommends \
         git \
         unzip \
         zip \
