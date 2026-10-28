@@ -30,5 +30,5 @@ A ausência do utilitário `cccp` nos containers de CI causava a omissão da eta
 - [x] **Fase 5 - Green Implement:** Instalação do `cccp` inserida em `images/cross/Dockerfile` e `images/rust/Dockerfile`.
 - [x] **Fase 6 - Refactor:** Alinhamento e clareza nas instruções de instalação e changelog.
 - [x] **Fase 7 - Mutation Test:** Testes de mutação validando rejeição se o `cccp` for omitido.
-- [ ] **Fase 8 - Quality Gate:** Auditoria e passagem dos testes locais.
+- [x] **Fase 8 - Quality Gate:** Auditoria e passagem dos testes locais.
 - [ ] **Fase 9 - Close:** Merge e acionamento da esteira para publicação das imagens.
