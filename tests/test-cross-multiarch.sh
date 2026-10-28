@@ -244,10 +244,14 @@ fi
 # 12. [MUTAÇÃO] Sensibilidade à ausência de cccp nas imagens (#37)
 echo -n "-> 12. [MUTAÇÃO] Testando sensibilidade à omissão do utilitário cccp... "
 MUT_CCCP=$(python3 -c "
-files = {'cross': open('$DOCKERFILE').read(), 'rust': open('$RUST_DOCKERFILE').read()}
-for name, content in files.items():
-    mutated = content.replace('/usr/local/bin/cccp', '/dev/null')
-    assert '/usr/local/bin/cccp' not in mutated, f'Mutação falhou para {name}'
+cross = open('$DOCKERFILE').read()
+rust = open('$RUST_DOCKERFILE').read()
+assert '/usr/local/bin/cccp' in cross, 'cross deve conter cccp'
+assert '/usr/local/bin/cccp' in rust, 'rust deve conter cccp'
+m_cross = cross.replace('/usr/local/bin/cccp', '')
+assert not ('/usr/local/bin/cccp' in m_cross and '/usr/local/bin/cccp' in rust)
+m_rust = rust.replace('/usr/local/bin/cccp', '')
+assert not ('/usr/local/bin/cccp' in cross and '/usr/local/bin/cccp' in m_rust)
 print('OK')
 " 2>&1)
 if [ "$MUT_CCCP" == "OK" ]; then
