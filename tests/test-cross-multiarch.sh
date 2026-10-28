@@ -7,6 +7,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 DOCKERFILE="$REPO_ROOT/images/cross/Dockerfile"
+RUST_DOCKERFILE="$REPO_ROOT/images/rust/Dockerfile"
 README="$REPO_ROOT/README.md"
 WORKFLOW="$REPO_ROOT/.forgejo/workflows/build-images.yml"
 
@@ -220,6 +221,39 @@ if [ "$MUT_LINKER" == "OK" ]; then
     echo "✅ OK (Linkers validados contra adulteração)"
 else
     echo "❌ FALHOU no teste de mutação de linker: $MUT_LINKER"
+    FAILURES=$((FAILURES + 1))
+fi
+
+# 11. Validação de inclusão do utilitário cccp nas imagens cross e rust (#37)
+echo -n "-> 11. Verificando instalação do utilitário cccp em cross e rust (#37)... "
+CCCP_OK=true
+if ! grep -q "/usr/local/bin/cccp" "$DOCKERFILE" || ! grep -q "cccp" "$DOCKERFILE"; then
+    CCCP_OK=false
+fi
+if ! grep -q "/usr/local/bin/cccp" "$RUST_DOCKERFILE" || ! grep -q "cccp" "$RUST_DOCKERFILE"; then
+    CCCP_OK=false
+fi
+
+if [ "$CCCP_OK" = true ]; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (utilitário cccp ausente em images/cross/Dockerfile ou images/rust/Dockerfile)"
+    FAILURES=$((FAILURES + 1))
+fi
+
+# 12. [MUTAÇÃO] Sensibilidade à ausência de cccp nas imagens (#37)
+echo -n "-> 12. [MUTAÇÃO] Testando sensibilidade à omissão do utilitário cccp... "
+MUT_CCCP=$(python3 -c "
+files = {'cross': open('$DOCKERFILE').read(), 'rust': open('$RUST_DOCKERFILE').read()}
+for name, content in files.items():
+    mutated = content.replace('/usr/local/bin/cccp', '/dev/null')
+    assert '/usr/local/bin/cccp' not in mutated, f'Mutação falhou para {name}'
+print('OK')
+" 2>&1)
+if [ "$MUT_CCCP" == "OK" ]; then
+    echo "✅ OK (Sensibilidade a omissão de cccp confirmada)"
+else
+    echo "❌ FALHOU na mutação de cccp: $MUT_CCCP"
     FAILURES=$((FAILURES + 1))
 fi
 
