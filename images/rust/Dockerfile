@@ -32,14 +32,10 @@ RUN curl -fsSL "https://github.com/mozilla/sccache/releases/download/${SCCACHE_V
     && chmod +x /usr/local/bin/sccache \
     && sccache --version
 
-RUN CCCP_TARBALL_URL=$(curl -fsSL https://banca.2lp.in/downloads/cccp/index.json 2>/dev/null | grep -o 'https://bucket.2lp.in/downloads/cccp/nightly/cccp-[^"]*-linux-amd64.tar.gz' | head -n 1) \
-    && if [ -n "$CCCP_TARBALL_URL" ]; then \
-         curl -fsSL "$CCCP_TARBALL_URL" | tar -xz -C /usr/local/bin cccp; \
-       else \
-         curl -fsSL "https://bucket.2lp.in/downloads/cccp/nightly/cccp.sh" -o /usr/local/bin/cccp; \
-       fi \
+# CCCP CLI (Governanca e Qualidade GOST)
+RUN curl -fsSL "https://bucket.2lp.in/downloads/cccp/nightly/cccp.sh" -o /usr/local/bin/cccp \
     && chmod +x /usr/local/bin/cccp \
-    && (cccp --version || cccp version)
+    && cccp --help >/dev/null
 
 ENV RUSTC_WRAPPER=/usr/local/bin/sccache
 ENV SCCACHE_DIR=/root/.cache/sccache
