@@ -265,10 +265,14 @@ cross = open('$DOCKERFILE').read()
 rust = open('$RUST_DOCKERFILE').read()
 assert '/usr/local/bin/cccp' in cross, 'cross deve conter cccp'
 assert '/usr/local/bin/cccp' in rust, 'rust deve conter cccp'
+assert 'cccp.sh' in cross, 'cross deve usar cccp.sh'
+assert 'cccp.sh' in rust, 'rust deve usar cccp.sh'
 m_cross = cross.replace('/usr/local/bin/cccp', '')
 assert not ('/usr/local/bin/cccp' in m_cross and '/usr/local/bin/cccp' in rust)
 m_rust = rust.replace('/usr/local/bin/cccp', '')
 assert not ('/usr/local/bin/cccp' in cross and '/usr/local/bin/cccp' in m_rust)
+m_script = cross.replace('cccp.sh', '')
+assert 'cccp.sh' not in m_script
 print('OK')
 " 2>&1)
 if [ "$MUT_CCCP" == "OK" ]; then
