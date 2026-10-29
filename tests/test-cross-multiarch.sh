@@ -241,6 +241,23 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 11b. Validação da instalação portátil de cccp.sh sem segfault (#38)
+echo -n "-> 11b. Verificando uso de cccp.sh portátil em cross e rust (#38)... "
+CCCP_SH_OK=true
+if ! grep -q "downloads/cccp/nightly/cccp.sh" "$DOCKERFILE" || ! grep -q "cccp --help" "$DOCKERFILE"; then
+    CCCP_SH_OK=false
+fi
+if ! grep -q "downloads/cccp/nightly/cccp.sh" "$RUST_DOCKERFILE" || ! grep -q "cccp --help" "$RUST_DOCKERFILE"; then
+    CCCP_SH_OK=false
+fi
+
+if [ "$CCCP_SH_OK" = true ]; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (instalação portátil via cccp.sh ausente em images/cross/Dockerfile ou images/rust/Dockerfile)"
+    FAILURES=$((FAILURES + 1))
+fi
+
 # 12. [MUTAÇÃO] Sensibilidade à ausência de cccp nas imagens (#37)
 echo -n "-> 12. [MUTAÇÃO] Testando sensibilidade à omissão do utilitário cccp... "
 MUT_CCCP=$(python3 -c "
