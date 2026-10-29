@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixes
+  - (cross) usar script portatil cccp.sh para evitar mismatch de libc (closes #38)
   - (android) usar base soberana mirror-node trixie com node 24 nativo (#33)
 
 ### Features

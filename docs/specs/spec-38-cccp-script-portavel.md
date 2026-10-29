@@ -24,9 +24,9 @@ O utilitário oficial `cccp.sh` distribuído na Banca é um script POSIX puro se
 - [x] **Fase 1 - Ticket:** Criado ticket #38 no Forgejo (`lumen/gost-ci`).
 - [x] **Fase 2 - Branch:** Criada branch dedicada `fix/38-cccp-script-portavel`.
 - [x] **Fase 3 - Doc/Spec:** Especificação formal elaborada neste documento.
-- [ ] **Fase 4 - Red Test:** Teste estático validando a diretiva canônica direta via script.
-- [ ] **Fase 5 - Green Implement:** Dockerfiles atualizados com `curl -fsSL https://bucket.2lp.in/downloads/cccp/nightly/cccp.sh -o /usr/local/bin/cccp`.
-- [ ] **Fase 6 - Refactor:** Limpeza e documentação no CHANGELOG.
-- [ ] **Fase 7 - Mutation Test:** Verificação de sensibilidade a omissões.
+- [x] **Fase 4 - Red Test:** Teste estático validando a diretiva canônica direta via script.
+- [x] **Fase 5 - Green Implement:** Dockerfiles atualizados com `curl -fsSL https://bucket.2lp.in/downloads/cccp/nightly/cccp.sh -o /usr/local/bin/cccp`.
+- [x] **Fase 6 - Refactor:** Limpeza e documentação no CHANGELOG.
+- [x] **Fase 7 - Mutation Test:** Verificação de sensibilidade a omissões.
 - [ ] **Fase 8 - Quality Gate:** Passagem de todos os testes locais.
 - [ ] **Fase 9 - Close:** Merge e envio para o Forgejo.
