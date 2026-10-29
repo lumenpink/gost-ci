@@ -28,5 +28,5 @@ O utilitário oficial `cccp.sh` distribuído na Banca é um script POSIX puro se
 - [x] **Fase 5 - Green Implement:** Dockerfiles atualizados com `curl -fsSL https://bucket.2lp.in/downloads/cccp/nightly/cccp.sh -o /usr/local/bin/cccp`.
 - [x] **Fase 6 - Refactor:** Limpeza e documentação no CHANGELOG.
 - [x] **Fase 7 - Mutation Test:** Verificação de sensibilidade a omissões.
-- [ ] **Fase 8 - Quality Gate:** Passagem de todos os testes locais.
+- [x] **Fase 8 - Quality Gate:** Passagem de todos os testes locais.
 - [ ] **Fase 9 - Close:** Merge e envio para o Forgejo.
