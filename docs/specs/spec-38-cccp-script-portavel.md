@@ -29,4 +29,4 @@ O utilitário oficial `cccp.sh` distribuído na Banca é um script POSIX puro se
 - [x] **Fase 6 - Refactor:** Limpeza e documentação no CHANGELOG.
 - [x] **Fase 7 - Mutation Test:** Verificação de sensibilidade a omissões.
 - [x] **Fase 8 - Quality Gate:** Passagem de todos os testes locais.
-- [ ] **Fase 9 - Close:** Merge e envio para o Forgejo.
+- [x] **Fase 9 - Close:** Documentação finalizada e pronta para merge/publicação.
