@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Fixes
+  - (images) isolar dependencias de php e dioxus em espelhos e pacotes locais (closes #40)
+  - (cross) instalar binario nativo linux-amd64 do cccp da Generic Package (closes #39)
   - (cross) usar script portatil cccp.sh para evitar mismatch de libc (closes #38)
   - (android) usar base soberana mirror-node trixie com node 24 nativo (#33)
 

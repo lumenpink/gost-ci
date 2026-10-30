@@ -44,6 +44,6 @@ Todas as diretivas `FROM` das imagens base do repositório já utilizam o regist
 - [x] **Fase 4 - Red Test:** Teste automatizado validando a ausência de chamadas externas de PHP multi-stage e Dioxus.
 - [x] **Fase 5 - Green Implement:** Publicação do pacote `dioxus` no Forgejo, atualização de `sync-upstream-images.sh` e dos Dockerfiles.
 - [x] **Fase 6 - Refactor:** Polimento e alinhamento de testes e scripts.
-- [ ] **Fase 7 - Mutation Test:** Testes de mutação validando detecção de fugas de espelhos.
-- [ ] **Fase 8 - Quality Gate:** Suíte de testes local aprovada com zero warnings.
-- [ ] **Fase 9 - Close:** Atualização de documentação, changelog e fechamento formal com `(closes #40)`.
+- [x] **Fase 7 - Mutation Test:** Testes de mutação validando detecção de fugas de espelhos.
+- [x] **Fase 8 - Quality Gate:** Suíte de testes local aprovada com zero warnings.
+- [x] **Fase 9 - Close:** Atualização de documentação, changelog e fechamento formal com `(closes #40)`.
