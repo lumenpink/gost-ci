@@ -69,6 +69,56 @@ else
     FAILED=1
 fi
 
+# 6. Testes de Mutação (Fase 7 GOST)
+echo "=== [MUTAÇÃO] Testando sensibilidade da auditoria contra mutantes (#40) ==="
+
+# Mutação 1: Rejeitar COPY --from externo
+echo -n "-> [MUTAÇÃO] Injetando COPY --from externo simulado... "
+TMP_M1=$(mktemp -d)
+cat << 'EOF' > "$TMP_M1/Dockerfile"
+FROM gambi.2lp.in/lumen/mirror-php:8.4-cli
+COPY --from=docker.io/library/composer:2 /usr/bin/composer /usr/bin/composer
+EOF
+
+M1_CAUGHT=0
+while IFS= read -r line; do
+    if [[ "$line" =~ ^[[:space:]]*COPY[[:space:]]+--from=([^[:space:]]+) ]]; then
+        copy_img="${BASH_REMATCH[1]}"
+        if [[ ! "$copy_img" =~ ^gambi\.2lp\.in/lumen/mirror- ]]; then
+            M1_CAUGHT=1
+            break
+        fi
+    fi
+done < <(grep -E '^[[:space:]]*COPY[[:space:]]+--from=' "$TMP_M1/Dockerfile" || true)
+rm -rf "$TMP_M1"
+
+if [[ "$M1_CAUGHT" -eq 1 ]]; then
+    echo "OK: Mutante de COPY --from externo detectado e bloqueado com precisão."
+else
+    echo "FALHA: Auditoria não detectou injeção de COPY --from externo."
+    FAILED=1
+fi
+
+# Mutação 2: Rejeitar Dioxus dx de github.com
+echo -n "-> [MUTAÇÃO] Injetando download de Dioxus de github.com simulado... "
+TMP_M2=$(mktemp -d)
+cat << 'EOF' > "$TMP_M2/Dockerfile"
+RUN curl -fsSL "https://github.com/DioxusLabs/dioxus/releases/download/v0.7.10/dx.tar.gz" | tar -xz
+EOF
+
+M2_CAUGHT=0
+if ! grep -q "gambi\.2lp\.in/api/packages/lumen/generic/dioxus" "$TMP_M2/Dockerfile" || grep -q "github\.com/DioxusLabs/dioxus" "$TMP_M2/Dockerfile"; then
+    M2_CAUGHT=1
+fi
+rm -rf "$TMP_M2"
+
+if [[ "$M2_CAUGHT" -eq 1 ]]; then
+    echo "OK: Mutante de download direto de github.com detectado e bloqueado com precisão."
+else
+    echo "FALHA: Auditoria não detectou Dioxus baixado de github.com."
+    FAILED=1
+fi
+
 if [[ "$FAILED" -ne 0 ]]; then
     echo "==> RESULTADO: FALHA (Contrato ainda não implementado)"
     exit 1
