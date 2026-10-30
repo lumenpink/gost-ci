@@ -33,7 +33,7 @@ RUN curl -fsSL "https://github.com/mozilla/sccache/releases/download/${SCCACHE_V
     && sccache --version
 
 # CCCP CLI (Governanca e Qualidade GOST)
-RUN curl -fsSL "https://bucket.2lp.in/downloads/cccp/nightly/cccp.sh" -o /usr/local/bin/cccp \
+RUN curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/cccp/nightly/cccp-linux-amd64" -o /usr/local/bin/cccp \
     && chmod +x /usr/local/bin/cccp \
     && cccp --help >/dev/null
 
