@@ -241,38 +241,38 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
-# 11b. Validação da instalação portátil de cccp.sh sem segfault (#38)
-echo -n "-> 11b. Verificando uso de cccp.sh portátil em cross e rust (#38)... "
-CCCP_SH_OK=true
-if ! grep -q "downloads/cccp/nightly/cccp.sh" "$DOCKERFILE" || ! grep -q "cccp --help" "$DOCKERFILE"; then
-    CCCP_SH_OK=false
+# 11b. Validação da instalação do binário nativo cccp via Generic Package (#39)
+echo -n "-> 11b. Verificando uso de binario nativo cccp em cross e rust (#39)... "
+CCCP_PKG_OK=true
+if ! grep -q "api/packages/lumen/generic/cccp/nightly/cccp-linux-amd64" "$DOCKERFILE" || ! grep -q "cccp --help" "$DOCKERFILE"; then
+    CCCP_PKG_OK=false
 fi
-if ! grep -q "downloads/cccp/nightly/cccp.sh" "$RUST_DOCKERFILE" || ! grep -q "cccp --help" "$RUST_DOCKERFILE"; then
-    CCCP_SH_OK=false
+if ! grep -q "api/packages/lumen/generic/cccp/nightly/cccp-linux-amd64" "$RUST_DOCKERFILE" || ! grep -q "cccp --help" "$RUST_DOCKERFILE"; then
+    CCCP_PKG_OK=false
 fi
 
-if [ "$CCCP_SH_OK" = true ]; then
+if [ "$CCCP_PKG_OK" = true ]; then
     echo "✅ OK"
 else
-    echo "❌ FALHOU (instalação portátil via cccp.sh ausente em images/cross/Dockerfile ou images/rust/Dockerfile)"
+    echo "❌ FALHOU (instalação via cccp-linux-amd64 da generic package ausente em images/cross/Dockerfile ou images/rust/Dockerfile)"
     FAILURES=$((FAILURES + 1))
 fi
 
-# 12. [MUTAÇÃO] Sensibilidade à ausência de cccp nas imagens (#37)
+# 12. [MUTAÇÃO] Sensibilidade à ausência de cccp nas imagens (#37, #39)
 echo -n "-> 12. [MUTAÇÃO] Testando sensibilidade à omissão do utilitário cccp... "
 MUT_CCCP=$(python3 -c "
 cross = open('$DOCKERFILE').read()
 rust = open('$RUST_DOCKERFILE').read()
 assert '/usr/local/bin/cccp' in cross, 'cross deve conter cccp'
 assert '/usr/local/bin/cccp' in rust, 'rust deve conter cccp'
-assert 'cccp.sh' in cross, 'cross deve usar cccp.sh'
-assert 'cccp.sh' in rust, 'rust deve usar cccp.sh'
+assert 'cccp-linux-amd64' in cross, 'cross deve usar cccp-linux-amd64'
+assert 'cccp-linux-amd64' in rust, 'rust deve usar cccp-linux-amd64'
 m_cross = cross.replace('/usr/local/bin/cccp', '')
 assert not ('/usr/local/bin/cccp' in m_cross and '/usr/local/bin/cccp' in rust)
 m_rust = rust.replace('/usr/local/bin/cccp', '')
 assert not ('/usr/local/bin/cccp' in cross and '/usr/local/bin/cccp' in m_rust)
-m_script = cross.replace('cccp.sh', '')
-assert 'cccp.sh' not in m_script
+m_script = cross.replace('cccp-linux-amd64', '')
+assert 'cccp-linux-amd64' not in m_script
 print('OK')
 " 2>&1)
 if [ "$MUT_CCCP" == "OK" ]; then
