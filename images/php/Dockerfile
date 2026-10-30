@@ -3,7 +3,7 @@ FROM gambi.2lp.in/lumen/mirror-php:8.4-cli
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Instalador otimizado de extensões oficiais PHP
-COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=gambi.2lp.in/lumen/mirror-php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
 
 # Dependências de sistema e Node.js 22 LTS (para suporte hermético a actions no Forgejo/act)
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
@@ -29,7 +29,7 @@ RUN pecl install xdebug \
     && rm -rf /tmp/pear
 
 # Composer 2 oficial hermético
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY --from=gambi.2lp.in/lumen/mirror-composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN php --version \
     && composer --version \

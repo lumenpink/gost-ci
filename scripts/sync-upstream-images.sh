@@ -48,6 +48,8 @@ declare -a MIRROR_MATRIX=(
     "debian:bookworm-slim|mirror-debian:bookworm-slim"
     "debian:trixie-slim|mirror-debian:trixie-slim"
     "php:8.4-cli|mirror-php:8.4-cli"
+    "composer:2|mirror-composer:2"
+    "mlocati/php-extension-installer|mirror-php-extension-installer:latest"
 )
 
 echo "=== [GOST-CI] Sincronização de Espelhos de Imagens Upstream (#23) ==="

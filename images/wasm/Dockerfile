@@ -57,7 +57,7 @@ RUN curl -fsSL "https://github.com/WebAssembly/binaryen/releases/download/${BINA
 
 ENV DIOXUS_VERSION=v0.7.10
 
-RUN curl -fsSL "https://github.com/DioxusLabs/dioxus/releases/download/${DIOXUS_VERSION}/dx-x86_64-unknown-linux-gnu.tar.gz" \
+RUN curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/dioxus/${DIOXUS_VERSION}/dx-x86_64-unknown-linux-gnu.tar.gz" \
     | tar -xz -C /usr/local/bin \
     && chmod +x /usr/local/bin/dx \
     && dx --version
