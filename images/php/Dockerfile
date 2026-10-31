@@ -21,12 +21,10 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
 # Instalar extensões necessárias para testes, geração de assets e CLI
 RUN install-php-extensions gd zip exif sqlite3 pcntl intl gmp
 
-# Xdebug — instalado e configurado como off por padrão (ativável via XDEBUG_MODE=coverage)
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug \
+# Xdebug — instalado via install-php-extensions e configurado como off por padrão (ativável via XDEBUG_MODE=coverage)
+RUN install-php-extensions xdebug \
     && echo "xdebug.mode=off" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "display_errors = Off" >> /usr/local/etc/php/conf.d/docker-php-display-errors.ini \
-    && rm -rf /tmp/pear
+    && echo "display_errors = Off" >> /usr/local/etc/php/conf.d/docker-php-display-errors.ini
 
 # Composer 2 oficial hermético
 COPY --from=gambi.2lp.in/lumen/mirror-composer:2 /usr/bin/composer /usr/bin/composer
