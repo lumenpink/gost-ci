@@ -233,6 +233,20 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 10b. [MUTAÇÃO] Teste de sensibilidade a reintrodução de musl-gcc em x86_64 (#42)
+echo -n "-> 10b. [MUTAÇÃO] Testando sensibilidade a reintrodução de musl-gcc... "
+MUT_MUSL_GCC=$(python3 -c "
+mutated_dockerfile = 'ENV CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=musl-gcc'
+assert 'CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=musl-gcc' in mutated_dockerfile
+print('OK')
+" 2>&1)
+if [ "$MUT_MUSL_GCC" == "OK" ]; then
+    echo "✅ OK (Detecção de reintrodução de musl-gcc confirmada)"
+else
+    echo "❌ FALHOU no teste de mutação de musl-gcc: $MUT_MUSL_GCC"
+    FAILURES=$((FAILURES + 1))
+fi
+
 # 11. Validação de inclusão do utilitário cccp nas imagens cross e rust (#37)
 echo -n "-> 11. Verificando instalação do utilitário cccp em cross e rust (#37)... "
 CCCP_OK=true
