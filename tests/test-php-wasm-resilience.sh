@@ -72,6 +72,19 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+echo -n "-> 6. [MUTAÇÃO] Testando sensibilidade à ausência de retries em sccache... "
+MUT_RETRY=$(python3 -c "
+cmd = 'curl -fsSL https://github.com/mozilla/sccache/...'
+assert '--retry 5' not in cmd
+print('OK')
+" 2>&1)
+if [ "$MUT_RETRY" == "OK" ]; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU na mutação de retry: $MUT_RETRY"
+    FAILURES=$((FAILURES + 1))
+fi
+
 echo "================================================================="
 if [ "$FAILURES" -gt 0 ]; then
     echo "💥 $FAILURES TESTE(S) FALHARAM (Esperado na Fase Red do DD-TDD)."
