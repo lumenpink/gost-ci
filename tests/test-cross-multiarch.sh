@@ -147,6 +147,15 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 6b. Validação de ausência de linker musl-gcc para x86_64 (#42)
+echo -n "-> 6b. Verificando que CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=musl-gcc não existe... "
+if ! grep -q "CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=musl-gcc" "$DOCKERFILE"; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=musl-gcc deve ser removido)"
+    FAILURES=$((FAILURES + 1))
+fi
+
 # 7. Validação de rustfmt e clippy herméticos (#15)
 echo -n "-> 7. Verificando inclusão de rustfmt e clippy em images/cross/Dockerfile... "
 if grep -q "rustup component add.*rustfmt" "$DOCKERFILE" && grep -q "rustup component add.*clippy" "$DOCKERFILE"; then
