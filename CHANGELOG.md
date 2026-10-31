@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixes
+  - (images) estabilizar php com install-php-extensions, resiliencia sccache e condensar readme (closes #41)
   - (images) isolar dependencias de php e dioxus em espelhos e pacotes locais (closes #40)
   - (cross) instalar binario nativo linux-amd64 do cccp da Generic Package (closes #39)
   - (cross) usar script portatil cccp.sh para evitar mismatch de libc (closes #38)
