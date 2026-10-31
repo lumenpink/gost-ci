@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixes
+  - (cross) remover linker musl-gcc em alvos musl x86_64 para evitar SIGSEGV (closes #42)
   - (images) estabilizar php com install-php-extensions, resiliencia sccache e condensar readme (closes #41)
   - (images) isolar dependencias de php e dioxus em espelhos e pacotes locais (closes #40)
   - (cross) instalar binario nativo linux-amd64 do cccp da Generic Package (closes #39)
