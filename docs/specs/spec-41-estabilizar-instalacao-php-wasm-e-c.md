@@ -32,10 +32,12 @@ A esteira de construção de imagens de CI (`.forgejo/workflows/build-images.yml
 
 ## 4. Status de Resolução (Fase 9)
 - **Status**: Concluído e Aprovado.
+- **Data**: 2026-10-31
 - **Laudo**: Sub-imagem PHP migrada para install-php-extensions, flags de retries adicionadas em sccache e README condensado para 32 linhas (GOST-20). Todos os testes e quality gates aprovados com 100% de conformidade.
 
 
 ## 4. Status de Resolução (Fase 9)
 - **Status**: Concluído e Aprovado.
+- **Data**: 2026-10-31
 - **Laudo**: Sub-imagem PHP migrada para install-php-extensions, flags de retries adicionadas em sccache e README condensado para 32 linhas (GOST-20). Todos os testes e quality gates aprovados com 100% de conformidade.
 
