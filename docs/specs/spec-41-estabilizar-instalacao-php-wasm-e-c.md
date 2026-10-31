@@ -29,3 +29,13 @@ A esteira de construção de imagens de CI (`.forgejo/workflows/build-images.yml
 - Teste `tests/test-php-wasm-resilience.sh` passando com 100% de sucesso.
 - Todos os testes de conformidade em `tests/*.sh` passando via `bash`.
 - Auditoria `cccp check --strict` com índice de 100% de conformidade.
+
+## 4. Status de Resolução (Fase 9)
+- **Status**: Concluído e Aprovado.
+- **Laudo**: Sub-imagem PHP migrada para install-php-extensions, flags de retries adicionadas em sccache e README condensado para 32 linhas (GOST-20). Todos os testes e quality gates aprovados com 100% de conformidade.
+
+
+## 4. Status de Resolução (Fase 9)
+- **Status**: Concluído e Aprovado.
+- **Laudo**: Sub-imagem PHP migrada para install-php-extensions, flags de retries adicionadas em sccache e README condensado para 32 linhas (GOST-20). Todos os testes e quality gates aprovados com 100% de conformidade.
+
