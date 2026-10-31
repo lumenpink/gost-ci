@@ -12,3 +12,7 @@ Ao compilar programas Rust para o alvo `x86_64-unknown-linux-musl`, a injeção 
 ## 3. Critérios de Aceite
 - Execução de `tests/test-cross-multiarch.sh` 100% aprovada.
 - `cccp check --strict` aprovado com 100% de conformidade.
+
+## 4. Status de Resolução (Fase 9)
+- **Status**: Concluído e Aprovado.
+- **Laudo**: Removido CARGO_TARGET_X86_64_UNKNOWN_LINUX_MUSL_LINKER=musl-gcc de images/cross/Dockerfile. Testes de validação e mutação aprovados.
