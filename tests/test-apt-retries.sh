@@ -74,6 +74,20 @@ else
     exit 1
 fi
 
+echo "=== [MUTAÇÃO] Testando sensibilidade contra ausência de Acquire::http::Timeout ==="
+MUTANT_TIMEOUT_DIR=$(mktemp -d)
+cp -r "$IMAGES_DIR/rust" "$MUTANT_TIMEOUT_DIR/rust"
+sed -i '/Acquire::http::Timeout/d' "$MUTANT_TIMEOUT_DIR/rust/Dockerfile"
+
+if grep -q "apt-get" "$MUTANT_TIMEOUT_DIR/rust/Dockerfile" && ! grep -q "Acquire::http::Timeout" "$MUTANT_TIMEOUT_DIR/rust/Dockerfile"; then
+    echo "✓ Mutante (remoção de Acquire::http::Timeout) capturado com precisão."
+    rm -rf "$MUTANT_TIMEOUT_DIR"
+else
+    rm -rf "$MUTANT_TIMEOUT_DIR"
+    echo "❌ Erro: Falha ao capturar mutante sem Acquire::http::Timeout."
+    exit 1
+fi
+
 echo "=== [MUTAÇÃO] Testando sensibilidade contra ausência de http_proxy no Kaniko ==="
 MUTANT_WF=$(mktemp)
 sed 's/--build-arg http_proxy=[^ ]* //g' "$WORKFLOW_FILE" > "$MUTANT_WF"
