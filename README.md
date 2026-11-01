@@ -15,7 +15,7 @@ Este projeto adota a norma **[GOST](https://codeberg.org/lumenpink/gost)** (Gosp
 As imagens oficiais são publicadas no registro `gambi.2lp.in/lumen/`:
 
 - **`gost-ci-rust`**: Verificação, testes e auditoria `cargo` e `cccp check`.
-- **`gost-ci-cross`**: Compilação cruzada multi-alvo (Linux, Windows, ARM, Musl).
+- **`gost-ci-cross`**: Compilação cruzada multi-alvo (Linux, Windows, ARM, Musl, Wasm).
 - **`gost-ci-deploy`**: Entrega contínua de sites e documentação (Cloudflare Workers / Pages).
 - **`gost-ci-wasm`**: Compilação hermética de aplicações WebAssembly (`wasm-pack`).
 - **`gost-ci-shell`**: Análise e testes BDD em shell (`shellspec`, `shellcheck`, `shfmt`).
