@@ -322,6 +322,28 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 14. [MUTAÇÃO] Sensibilidade à ausência de wasm-pack ou target wasm32 (#43)
+echo -n "-> 14. [MUTAÇÃO] Testando sensibilidade à omissão de wasm-pack e wasm32 (#43)... "
+MUT_WASM=$(python3 -c "
+cross = open('$DOCKERFILE').read()
+assert 'wasm32-unknown-unknown' in cross, 'cross deve conter wasm32'
+assert 'WASM_PACK_VERSION' in cross, 'cross deve conter WASM_PACK_VERSION'
+assert '/usr/local/bin/wasm-pack' in cross, 'cross deve conter /usr/local/bin/wasm-pack'
+m1 = cross.replace('wasm32-unknown-unknown', '')
+assert 'wasm32-unknown-unknown' not in m1
+m2 = cross.replace('WASM_PACK_VERSION', '')
+assert 'WASM_PACK_VERSION' not in m2
+m3 = cross.replace('/usr/local/bin/wasm-pack', '')
+assert '/usr/local/bin/wasm-pack' not in m3
+print('OK')
+" 2>&1)
+if [ "$MUT_WASM" == "OK" ]; then
+    echo "✅ OK (Sensibilidade a omissão de wasm-pack confirmada)"
+else
+    echo "❌ FALHOU na mutação de wasm-pack: $MUT_WASM"
+    FAILURES=$((FAILURES + 1))
+fi
+
 echo "================================================================="
 if [ "$FAILURES" -gt 0 ]; then
     echo "💥 $FAILURES TESTE(S) FALHARAM (Esperado na Fase Red do DD-TDD)."
