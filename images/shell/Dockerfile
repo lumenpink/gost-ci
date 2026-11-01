@@ -5,6 +5,8 @@ ENV SHELLSPEC_VERSION=0.28.1
 ENV SHFMT_VERSION=v3.10.0
 
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
     && apt-get update && apt-get install -y --no-install-recommends \
     bash \
     git \

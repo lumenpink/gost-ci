@@ -7,6 +7,8 @@ COPY --from=gambi.2lp.in/lumen/mirror-php-extension-installer:latest /usr/bin/in
 
 # Dependências de sistema e Node.js 22 LTS (para suporte hermético a actions no Forgejo/act)
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
     && apt-get update && apt-get install -y --no-install-recommends \
         git \
         unzip \

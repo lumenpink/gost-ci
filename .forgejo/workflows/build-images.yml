@@ -25,7 +25,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-rust:latest --destination=gambi.2lp.in/lumen/gost-ci-rust:1.99.1"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-rust:latest --destination=gambi.2lp.in/lumen/gost-ci-rust:1.99.1"
 
   build-cross:
     name: "Build & Push gost-ci-cross"
@@ -42,7 +42,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-cross:latest --destination=gambi.2lp.in/lumen/gost-ci-cross:1.99.1"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-cross:latest --destination=gambi.2lp.in/lumen/gost-ci-cross:1.99.1"
 
   build-deploy:
     name: "Build & Push gost-ci-deploy"
@@ -59,7 +59,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-deploy:latest --destination=gambi.2lp.in/lumen/gost-ci-deploy:node24"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-deploy:latest --destination=gambi.2lp.in/lumen/gost-ci-deploy:node24"
 
   build-wasm:
     name: "Build & Push gost-ci-wasm"
@@ -76,7 +76,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-wasm:latest --destination=gambi.2lp.in/lumen/gost-ci-wasm:1.99.1"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-wasm:latest --destination=gambi.2lp.in/lumen/gost-ci-wasm:1.99.1"
 
   build-shell:
     name: "Build & Push gost-ci-shell"
@@ -93,7 +93,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-shell:latest --destination=gambi.2lp.in/lumen/gost-ci-shell:0.28.1"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-shell:latest --destination=gambi.2lp.in/lumen/gost-ci-shell:0.28.1"
 
   build-php:
     name: "Build & Push gost-ci-php"
@@ -110,7 +110,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-php:latest --destination=gambi.2lp.in/lumen/gost-ci-php:8.4"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-php:latest --destination=gambi.2lp.in/lumen/gost-ci-php:8.4"
 
   build-gui:
     name: "Build & Push gost-ci-gui"
@@ -127,7 +127,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-gui:latest --destination=gambi.2lp.in/lumen/gost-ci-gui:1.99.1"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-gui:latest --destination=gambi.2lp.in/lumen/gost-ci-gui:1.99.1"
 
   build-lauda:
     name: "Build & Push gost-ci-lauda"
@@ -145,7 +145,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-lauda:latest --destination=gambi.2lp.in/lumen/gost-ci-lauda:1.99.1"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-lauda:latest --destination=gambi.2lp.in/lumen/gost-ci-lauda:1.99.1"
 
   build-banca:
     name: "Build & Push gost-ci-banca"
@@ -162,7 +162,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-banca:latest --destination=gambi.2lp.in/lumen/gost-ci-banca:node24"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-banca:latest --destination=gambi.2lp.in/lumen/gost-ci-banca:node24"
 
   build-flutter:
     name: "Build & Push gost-ci-flutter"
@@ -179,7 +179,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-flutter:latest --destination=gambi.2lp.in/lumen/gost-ci-flutter:android34"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-flutter:latest --destination=gambi.2lp.in/lumen/gost-ci-flutter:android34"
 
   build-android:
     name: "Build & Push gost-ci-android"
@@ -196,7 +196,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/android --dockerfile=images/android/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-android:latest --destination=gambi.2lp.in/lumen/gost-ci-android:ndk27-sdk34"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/android --dockerfile=images/android/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-android:latest --destination=gambi.2lp.in/lumen/gost-ci-android:ndk27-sdk34"
 
   build-python:
     name: "Build & Push gost-ci-python"
@@ -213,7 +213,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/python --dockerfile=images/python/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-python:latest --destination=gambi.2lp.in/lumen/gost-ci-python:3.11"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/python --dockerfile=images/python/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-python:latest --destination=gambi.2lp.in/lumen/gost-ci-python:3.11"
 
   build-go:
     name: "Build & Push gost-ci-go"
@@ -230,5 +230,5 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --context=dir://images/go --dockerfile=images/go/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-go:latest --destination=gambi.2lp.in/lumen/gost-ci-go:1.24"
+            /kaniko/executor --build-arg http_proxy="${http_proxy:-}" --build-arg HTTP_PROXY="${http_proxy:-}" --context=dir://images/go --dockerfile=images/go/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-go:latest --destination=gambi.2lp.in/lumen/gost-ci-go:1.24"
 

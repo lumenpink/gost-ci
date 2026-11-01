@@ -3,6 +3,8 @@ FROM gambi.2lp.in/lumen/mirror-node:24-bookworm-slim
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
     && apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
