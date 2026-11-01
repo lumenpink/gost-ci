@@ -64,6 +64,7 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- \
     && rustup target add armv7-unknown-linux-gnueabihf \
     && rustup target add aarch64-linux-android \
     && rustup target add x86_64-linux-android \
+    && rustup target add wasm32-unknown-unknown \
     && rustc --version \
     && cargo --version
 
@@ -73,6 +74,13 @@ RUN curl -fsSL --retry 5 --retry-connrefused --retry-delay 2 "https://github.com
     | tar -xz -C /usr/local/bin --strip-components=1 "sccache-${SCCACHE_VERSION}-x86_64-unknown-linux-musl/sccache" \
     && chmod +x /usr/local/bin/sccache \
     && sccache --version
+
+ENV WASM_PACK_VERSION=v0.13.1
+
+RUN curl -fsSL "https://github.com/rustwasm/wasm-pack/releases/download/${WASM_PACK_VERSION}/wasm-pack-${WASM_PACK_VERSION}-x86_64-unknown-linux-musl.tar.gz" \
+    | tar -xz -C /usr/local/bin --strip-components=1 "wasm-pack-${WASM_PACK_VERSION}-x86_64-unknown-linux-musl/wasm-pack" \
+    && chmod +x /usr/local/bin/wasm-pack \
+    && wasm-pack --version
 
 # CCCP CLI (Governanca e Qualidade GOST)
 RUN curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/cccp/nightly/cccp-linux-amd64" -o /usr/local/bin/cccp \
