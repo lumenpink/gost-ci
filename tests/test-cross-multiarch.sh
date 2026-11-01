@@ -305,6 +305,23 @@ else
     FAILURES=$((FAILURES + 1))
 fi
 
+# 13. Validação de suporte a WebAssembly (wasm-pack e wasm32-unknown-unknown) na sub-imagem cross (#43)
+echo -n "-> 13. Verificando suporte a WebAssembly (wasm-pack e wasm32) em images/cross/Dockerfile (#43)... "
+WASM_OK=true
+if ! grep -q "wasm32-unknown-unknown" "$DOCKERFILE"; then
+    WASM_OK=false
+fi
+if ! grep -q "WASM_PACK_VERSION" "$DOCKERFILE" || ! grep -q "/usr/local/bin/wasm-pack" "$DOCKERFILE"; then
+    WASM_OK=false
+fi
+
+if [ "$WASM_OK" = true ]; then
+    echo "✅ OK"
+else
+    echo "❌ FALHOU (wasm32-unknown-unknown ou wasm-pack ausente em images/cross/Dockerfile)"
+    FAILURES=$((FAILURES + 1))
+fi
+
 echo "================================================================="
 if [ "$FAILURES" -gt 0 ]; then
     echo "💥 $FAILURES TESTE(S) FALHARAM (Esperado na Fase Red do DD-TDD)."
