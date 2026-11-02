@@ -2,8 +2,9 @@ FROM gambi.2lp.in/lumen/mirror-php:8.4-cli
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Instalador otimizado de extensões oficiais PHP
+# Instalador otimizado de extensões oficiais PHP e espelho hermético PECL
 COPY --from=gambi.2lp.in/lumen/mirror-php-extension-installer:latest /usr/bin/install-php-extensions /usr/local/bin/
+COPY --from=gambi.2lp.in/lumen/mirror-pecl-xdebug:3.5.3 /xdebug.tgz /tmp/xdebug.tgz
 
 # Dependências de sistema e Node.js 22 LTS (para suporte hermético a actions no Forgejo/act)
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
@@ -25,8 +26,10 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
 # Instalar extensões necessárias para testes, geração de assets e CLI
 RUN install-php-extensions gd zip exif sqlite3 pcntl intl gmp
 
-# Xdebug — instalado via install-php-extensions e configurado como off por padrão (ativável via XDEBUG_MODE=coverage)
-RUN install-php-extensions xdebug \
+# Xdebug hermético via espelho local — sem dependência de rede externa para pecl.php.net
+RUN pecl install /tmp/xdebug.tgz \
+    && docker-php-ext-enable xdebug \
+    && rm -f /tmp/xdebug.tgz \
     && echo "xdebug.mode=off" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "display_errors = Off" >> /usr/local/etc/php/conf.d/docker-php-display-errors.ini
 

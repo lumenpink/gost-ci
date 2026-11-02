@@ -18,11 +18,11 @@ echo "================================================================="
 FAILURES=0
 
 # 1. Validação do PHP
-echo -n "-> 1. Verificando uso de install-php-extensions em images/php/Dockerfile... "
-if grep -q "install-php-extensions.*xdebug" "$PHP_DOCKERFILE" && ! grep -q "pecl install xdebug" "$PHP_DOCKERFILE"; then
+echo -n "-> 1. Verificando uso de mirror-pecl-xdebug ou install-php-extensions em images/php/Dockerfile... "
+if grep -qE "(install-php-extensions.*xdebug|mirror-pecl-xdebug)" "$PHP_DOCKERFILE" && ! grep -qE "pecl install xdebug(\s|$)" "$PHP_DOCKERFILE"; then
     echo "✅ OK"
 else
-    echo "❌ FALHOU (install-php-extensions xdebug ausente ou pecl install xdebug remanescente)"
+    echo "❌ FALHOU (espelho de xdebug ausente ou pecl install xdebug remoto remanescente)"
     FAILURES=$((FAILURES + 1))
 fi
 

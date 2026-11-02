@@ -22,8 +22,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/rust/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/rust/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -31,7 +46,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-rust:latest --destination=gambi.2lp.in/lumen/gost-ci-rust:1.99.1"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/rust --dockerfile=images/rust/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-rust:latest --destination=gambi.2lp.in/lumen/gost-ci-rust:1.99.1"
 
   build-cross:
     name: "Build & Push gost-ci-cross"
@@ -39,8 +54,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/cross/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/cross/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -48,7 +78,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-cross:latest --destination=gambi.2lp.in/lumen/gost-ci-cross:1.99.1"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-cross:latest --destination=gambi.2lp.in/lumen/gost-ci-cross:1.99.1"
 
   build-deploy:
     name: "Build & Push gost-ci-deploy"
@@ -56,8 +86,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/deploy/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/deploy/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -65,7 +110,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-deploy:latest --destination=gambi.2lp.in/lumen/gost-ci-deploy:node24"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/deploy --dockerfile=images/deploy/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-deploy:latest --destination=gambi.2lp.in/lumen/gost-ci-deploy:node24"
 
   build-wasm:
     name: "Build & Push gost-ci-wasm"
@@ -73,8 +118,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/wasm/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/wasm/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -82,7 +142,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-wasm:latest --destination=gambi.2lp.in/lumen/gost-ci-wasm:1.99.1"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/wasm --dockerfile=images/wasm/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-wasm:latest --destination=gambi.2lp.in/lumen/gost-ci-wasm:1.99.1"
 
   build-shell:
     name: "Build & Push gost-ci-shell"
@@ -90,8 +150,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/shell/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/shell/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -99,7 +174,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-shell:latest --destination=gambi.2lp.in/lumen/gost-ci-shell:0.28.1"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/shell --dockerfile=images/shell/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-shell:latest --destination=gambi.2lp.in/lumen/gost-ci-shell:0.28.1"
 
   build-php:
     name: "Build & Push gost-ci-php"
@@ -107,8 +182,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/php/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/php/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -116,7 +206,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-php:latest --destination=gambi.2lp.in/lumen/gost-ci-php:8.4"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/php --dockerfile=images/php/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-php:latest --destination=gambi.2lp.in/lumen/gost-ci-php:8.4"
 
   build-gui:
     name: "Build & Push gost-ci-gui"
@@ -124,8 +214,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/gui/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/gui/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -133,17 +238,31 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-gui:latest --destination=gambi.2lp.in/lumen/gost-ci-gui:1.99.1"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/gui --dockerfile=images/gui/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-gui:latest --destination=gambi.2lp.in/lumen/gost-ci-gui:1.99.1"
 
   build-lauda:
     name: "Build & Push gost-ci-lauda"
     runs-on: ubuntu-latest
-    needs: [build-rust]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/lauda/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/lauda/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -151,7 +270,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-lauda:latest --destination=gambi.2lp.in/lumen/gost-ci-lauda:1.99.1"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-lauda:latest --destination=gambi.2lp.in/lumen/gost-ci-lauda:1.99.1"
 
   build-banca:
     name: "Build & Push gost-ci-banca"
@@ -159,8 +278,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/banca/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/banca/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -168,7 +302,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-banca:latest --destination=gambi.2lp.in/lumen/gost-ci-banca:node24"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/banca --dockerfile=images/banca/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-banca:latest --destination=gambi.2lp.in/lumen/gost-ci-banca:node24"
 
   build-flutter:
     name: "Build & Push gost-ci-flutter"
@@ -176,8 +310,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/flutter/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/flutter/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -185,7 +334,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-flutter:latest --destination=gambi.2lp.in/lumen/gost-ci-flutter:android34"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/flutter --dockerfile=images/flutter/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-flutter:latest --destination=gambi.2lp.in/lumen/gost-ci-flutter:android34"
 
   build-android:
     name: "Build & Push gost-ci-android"
@@ -193,8 +342,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/android/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/android/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -202,7 +366,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/android --dockerfile=images/android/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-android:latest --destination=gambi.2lp.in/lumen/gost-ci-android:ndk27-sdk34"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/android --dockerfile=images/android/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-android:latest --destination=gambi.2lp.in/lumen/gost-ci-android:ndk27-sdk34"
 
   build-python:
     name: "Build & Push gost-ci-python"
@@ -210,8 +374,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/python/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/python/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -219,7 +398,7 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/python --dockerfile=images/python/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-python:latest --destination=gambi.2lp.in/lumen/gost-ci-python:3.11"
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/python --dockerfile=images/python/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-python:latest --destination=gambi.2lp.in/lumen/gost-ci-python:3.11"
 
   build-go:
     name: "Build & Push gost-ci-go"
@@ -227,8 +406,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Changes
+        id: check
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          elif git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" 2>/dev/null | grep -qE '^(\.forgejo/|images/go/)'; then
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Nenhuma alteracao detectada em images/go/. Pulando build."
+            echo "build=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Build & Push Kaniko
+        if: steps.check.outputs.build == 'true'
         uses: docker://gcr.io/kaniko-project/executor:debug
         with:
           entrypoint: /busybox/sh
@@ -236,5 +430,4 @@ jobs:
             -c "if [ -z \"${{ secrets.GAMBI_2LP_IN_TOKEN }}\" ]; then echo 'ERRO [FAIL-FAST]: GAMBI_2LP_IN_TOKEN nao configurado' >&2; exit 1; fi &&
             mkdir -p /kaniko/.docker &&
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
-            /kaniko/executor --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/go --dockerfile=images/go/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-go:latest --destination=gambi.2lp.in/lumen/gost-ci-go:1.24"
-
+            /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/go --dockerfile=images/go/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-go:latest --destination=gambi.2lp.in/lumen/gost-ci-go:1.24"
