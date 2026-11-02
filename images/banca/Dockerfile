@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
+    && ([ -n "$http_proxy" ] && echo "Acquire::http::Proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/01proxy || true) \
     && apt-get update && apt-get install -y --no-install-recommends \
     bash \
     git \
@@ -21,6 +22,7 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     python3 \
     python3-pil \
     aapt \
+    && rm -f /etc/apt/apt.conf.d/01proxy \
     && rm -rf /var/lib/apt/lists/*
 
 CMD ["bash"]

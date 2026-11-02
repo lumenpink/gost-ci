@@ -10,6 +10,7 @@ ENV PATH=$FLUTTER_HOME/bin:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
+    && ([ -n "$http_proxy" ] && echo "Acquire::http::Proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/01proxy || true) \
     && apt-get update && apt-get install -y --no-install-recommends \
     bash \
     curl \
@@ -22,6 +23,7 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     libglu1-mesa \
     file \
     jq \
+    && rm -f /etc/apt/apt.conf.d/01proxy \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Instalação do Android SDK Command-Line Tools & Plataforma Android 34

@@ -10,6 +10,7 @@ ENV PATH="/root/.cargo/bin:${PATH}"
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
+    && ([ -n "$http_proxy" ] && echo "Acquire::http::Proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/01proxy || true) \
     && apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
@@ -19,6 +20,7 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     libssl-dev \
     tar \
     gzip \
+    && rm -f /etc/apt/apt.conf.d/01proxy \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- \
