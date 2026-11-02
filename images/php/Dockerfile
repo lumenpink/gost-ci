@@ -10,8 +10,11 @@ COPY --from=gambi.2lp.in/lumen/mirror-pecl-xdebug:3.5.3 /xdebug.tgz /tmp/xdebug.
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
     && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::http::Retries "5";' >> /etc/apt/apt.conf.d/80-retries \
+    && echo 'Acquire::https::Retries "5";' >> /etc/apt/apt.conf.d/80-retries \
     && ([ -n "$http_proxy" ] && echo "Acquire::http::Proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/01proxy || true) \
-    && apt-get update && apt-get install -y --no-install-recommends \
+    && (apt-get update || (sleep 3 && rm -f /etc/apt/apt.conf.d/01proxy && apt-get update)) \
+    && apt-get install -y --no-install-recommends \
         git \
         unzip \
         zip \
