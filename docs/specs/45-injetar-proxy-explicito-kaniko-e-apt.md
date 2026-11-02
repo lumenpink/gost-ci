@@ -23,3 +23,9 @@ Na esteira de compilação de imagens (`build-images.yml`), as etapas que execut
    - E garantir a remoção de `/etc/apt/apt.conf.d/01proxy` antes do término da mesma instrução `RUN`, para não gravar IPs locais na imagem final.
 3. **Auditoria Automatizada e Testes**:
    - `tests/test-apt-retries.sh` deve validar a presença da configuração temporária do proxy em todos os Dockerfiles e o repasse explícito do IP do proxy no workflow.
+
+## 3. Status e Resultados
+- Status: Aprovado e Validado na Fase 8.
+- Proxy `http://172.17.0.1:3142` injetado no `env:` global e nas 13 chamadas do Kaniko em `build-images.yml`.
+- Injeção dinâmica de `01proxy` e limpeza pós-instalação configurada em 12 Dockerfiles.
+- 4 testes de mutação e auditoria estrita `cccp check --strict` aprovados com 100% de conformidade.
