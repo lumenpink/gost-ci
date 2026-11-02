@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixes
+  - (ci) injetar proxy explicito 172.17.0.1:3142 no kaniko e 01proxy temporario no apt (closes #45)
   - (ci) propagar proxy local de build no kaniko e timeouts defensivos no apt (closes #44)
   - (cross) remover linker musl-gcc em alvos musl x86_64 para evitar SIGSEGV (closes #42)
   - (images) estabilizar php com install-php-extensions, resiliencia sccache e condensar readme (closes #41)
