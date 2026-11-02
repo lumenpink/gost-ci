@@ -27,15 +27,21 @@ for df in $DOCKERFILES; do
             echo "  ❌ FALHA: $rel_path usa apt-get mas não configura Acquire::http::Timeout."
             FAILED=1
         fi
+        if grep -q "Acquire::http::Proxy" "$df" && grep -q "rm -f /etc/apt/apt.conf.d/01proxy" "$df"; then
+            echo "  ✓ $rel_path: Configuração de proxy dinâmico 01proxy presente e com limpeza."
+        else
+            echo "  ❌ FALHA: $rel_path usa apt-get mas não configura injeção/limpeza de 01proxy."
+            FAILED=1
+        fi
     fi
 done
 
 if [ "$FAILED" -ne 0 ]; then
-    echo "❌ Erro: Um ou mais Dockerfiles não possuem retries/timeouts configurados para o APT."
+    echo "❌ Erro: Um ou mais Dockerfiles não possuem retries/timeouts/01proxy configurados para o APT."
     exit 1
 fi
 
-echo "✅ Todos os Dockerfiles com apt-get possuem resiliência de retries e timeouts configurada."
+echo "✅ Todos os Dockerfiles com apt-get possuem resiliência de retries, timeouts e proxy configurada."
 
 echo "==> [TESTE] Validando propagação de proxy nas invocações do Kaniko..."
 WORKFLOW_FILE="$REPO_ROOT/.forgejo/workflows/build-images.yml"
@@ -44,18 +50,23 @@ if [ ! -f "$WORKFLOW_FILE" ]; then
     exit 1
 fi
 
-TOTAL_KANIKO=$(grep -c "/kaniko/executor" "$WORKFLOW_FILE" || true)
-TOTAL_WITH_PROXY=$(grep "/kaniko/executor" "$WORKFLOW_FILE" | grep -c "\-\-build-arg http_proxy=" || true)
-
-echo "  • Total de invocações do Kaniko: $TOTAL_KANIKO"
-echo "  • Invocações com repasse de http_proxy: $TOTAL_WITH_PROXY"
-
-if [ "$TOTAL_KANIKO" -eq 0 ] || [ "$TOTAL_WITH_PROXY" -ne "$TOTAL_KANIKO" ]; then
-    echo "  ❌ FALHA: Existem invocações do Kaniko sem --build-arg http_proxy no workflow."
+if ! grep -q "172.17.0.1:3142" "$WORKFLOW_FILE"; then
+    echo "  ❌ FALHA: Workflow não possui IP de proxy explícito 172.17.0.1:3142."
     exit 1
 fi
 
-echo "✅ Todas as invocações do Kaniko propagam http_proxy."
+TOTAL_KANIKO=$(grep -c "/kaniko/executor" "$WORKFLOW_FILE" || true)
+TOTAL_WITH_PROXY=$(grep "/kaniko/executor" "$WORKFLOW_FILE" | grep -c "\-\-build-arg http_proxy=\"http://172.17.0.1:3142\"" || true)
+
+echo "  • Total de invocações do Kaniko: $TOTAL_KANIKO"
+echo "  • Invocações com repasse explícito de proxy 172.17.0.1:3142: $TOTAL_WITH_PROXY"
+
+if [ "$TOTAL_KANIKO" -eq 0 ] || [ "$TOTAL_WITH_PROXY" -ne "$TOTAL_KANIKO" ]; then
+    echo "  ❌ FALHA: Existem invocações do Kaniko sem proxy explícito 172.17.0.1:3142 no workflow."
+    exit 1
+fi
+
+echo "✅ Todas as invocações do Kaniko propagam proxy 172.17.0.1:3142 explicitamente."
 
 # ==============================================================================
 # MUTAÇÃO: Garantir que remoção de Acquire::Retries ou proxy falha o teste
