@@ -6,9 +6,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-LAUDA_DOCKERFILE="$REPO_ROOT/images/lauda/Dockerfile"
+LAUDA_DOCKERFILE="${1:-$REPO_ROOT/images/lauda/Dockerfile}"
 
-echo "=== [TEST] Validando limitação de concorrência em images/lauda/Dockerfile (#47) ==="
+echo "=== [TEST] Validando limitação de concorrência em $LAUDA_DOCKERFILE (#47) ==="
 
 FAILURES=0
 
