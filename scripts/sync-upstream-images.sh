@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# Utilitário Soberano: Espelhamento de Imagens Upstream para gambi.2lp.in (#23)
+# Utilitário: Espelhamento de Imagens Upstream para gambi.2lp.in (#23, #46)
 # ==============================================================================
 set -euo pipefail
 
@@ -40,8 +40,8 @@ if [[ -z "${GAMBI_2LP_IN_TOKEN:-}" ]]; then
     exit 1
 fi
 
-# Matriz Canônica de Imagens Base Upstream e seus Espelhos Soberanos
-# Formato: "UPSTREAM_IMAGE|SOVEREIGN_IMAGE_NAME:TAG"
+# Matriz Canônica de Imagens Base Upstream e seus Espelhos Locais
+# Formato: "UPSTREAM_IMAGE|MIRROR_IMAGE_NAME:TAG"
 declare -a MIRROR_MATRIX=(
     "node:24-bookworm-slim|mirror-node:24-bookworm-slim"
     "node:24-trixie-slim|mirror-node:24-trixie-slim"
@@ -53,7 +53,7 @@ declare -a MIRROR_MATRIX=(
 )
 
 echo "=== [GOST-CI] Sincronização de Espelhos de Imagens Upstream (#23) ==="
-echo "Registry Soberano: $REGISTRY_HOST/$REGISTRY_OWNER"
+echo "Registry Local: $REGISTRY_HOST/$REGISTRY_OWNER"
 echo "Total de imagens mapeadas: ${#MIRROR_MATRIX[@]}"
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
@@ -85,10 +85,10 @@ for entry in "${MIRROR_MATRIX[@]}"; do
         echo "-> Baixando imagem upstream..."
         docker pull "$upstream"
 
-        echo "-> Retagueando para registry soberano..."
+        echo "-> Retagueando para registry local..."
         docker tag "$upstream" "$target"
 
-        echo "-> Publicando no registry soberano..."
+        echo "-> Publicando no registry local..."
         docker push "$target"
         echo "OK: $target publicado com sucesso."
     fi
