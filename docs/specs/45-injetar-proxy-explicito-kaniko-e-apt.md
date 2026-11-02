@@ -25,7 +25,7 @@ Na esteira de compilação de imagens (`build-images.yml`), as etapas que execut
    - `tests/test-apt-retries.sh` deve validar a presença da configuração temporária do proxy em todos os Dockerfiles e o repasse explícito do IP do proxy no workflow.
 
 ## 3. Status e Resultados
-- Status: Aprovado e Validado na Fase 8.
+- Status: Concluído e Fechado (Fase 9).
 - Proxy `http://172.17.0.1:3142` injetado no `env:` global e nas 13 chamadas do Kaniko em `build-images.yml`.
 - Injeção dinâmica de `01proxy` e limpeza pós-instalação configurada em 12 Dockerfiles.
 - 4 testes de mutação e auditoria estrita `cccp check --strict` aprovados com 100% de conformidade.
