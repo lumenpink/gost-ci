@@ -99,11 +99,25 @@ else
     exit 1
 fi
 
+echo "=== [MUTAÇÃO] Testando sensibilidade contra ausência de 01proxy no Dockerfile ==="
+MUTANT_01PROXY_DIR=$(mktemp -d)
+cp -r "$IMAGES_DIR/wasm" "$MUTANT_01PROXY_DIR/wasm"
+sed -i '/01proxy/d' "$MUTANT_01PROXY_DIR/wasm/Dockerfile"
+
+if grep -q "apt-get" "$MUTANT_01PROXY_DIR/wasm/Dockerfile" && ! grep -q "01proxy" "$MUTANT_01PROXY_DIR/wasm/Dockerfile"; then
+    echo "✓ Mutante (remoção de 01proxy) capturado com precisão."
+    rm -rf "$MUTANT_01PROXY_DIR"
+else
+    rm -rf "$MUTANT_01PROXY_DIR"
+    echo "❌ Erro: Falha ao capturar mutante sem 01proxy."
+    exit 1
+fi
+
 echo "=== [MUTAÇÃO] Testando sensibilidade contra ausência de http_proxy no Kaniko ==="
 MUTANT_WF=$(mktemp)
 sed 's/--build-arg http_proxy=[^ ]* //g' "$WORKFLOW_FILE" > "$MUTANT_WF"
 MUTANT_KANIKO=$(grep -c "/kaniko/executor" "$MUTANT_WF" || true)
-MUTANT_WITH_PROXY=$(grep "/kaniko/executor" "$MUTANT_WF" | grep -c "\-\-build-arg http_proxy=" || true)
+MUTANT_WITH_PROXY=$(grep "/kaniko/executor" "$MUTANT_WF" | grep -c "\-\-build-arg http_proxy=\"http://172.17.0.1:3142\"" || true)
 
 if [ "$MUTANT_KANIKO" -gt 0 ] && [ "$MUTANT_WITH_PROXY" -eq 0 ]; then
     echo "✓ Mutante (remoção de http_proxy no Kaniko) capturado com precisão."
