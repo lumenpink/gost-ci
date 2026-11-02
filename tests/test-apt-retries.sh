@@ -140,4 +140,35 @@ else
     exit 1
 fi
 
+echo "=== [MUTAÇÃO] Testando sensibilidade contra ausência de Acquire::http::Retries ==="
+MUTANT_RETRIES_DIR=$(mktemp -d)
+cp -r "$IMAGES_DIR/deploy" "$MUTANT_RETRIES_DIR/deploy"
+sed -i '/Acquire::http::Retries/d' "$MUTANT_RETRIES_DIR/deploy/Dockerfile"
+
+if grep -q "apt-get" "$MUTANT_RETRIES_DIR/deploy/Dockerfile" && ! grep -q "Acquire::http::Retries" "$MUTANT_RETRIES_DIR/deploy/Dockerfile"; then
+    echo "✓ Mutante (remoção de Acquire::http::Retries) capturado com precisão."
+    rm -rf "$MUTANT_RETRIES_DIR"
+else
+    rm -rf "$MUTANT_RETRIES_DIR"
+    echo "❌ Erro: Falha ao capturar mutante sem Acquire::http::Retries."
+    exit 1
+fi
+
+echo "=== [MUTAÇÃO] Testando sensibilidade contra ausência de fallback em apt-get update ==="
+MUTANT_FALLBACK_DIR=$(mktemp -d)
+cp -r "$IMAGES_DIR/deploy" "$MUTANT_FALLBACK_DIR/deploy"
+sed -i 's/(apt-get update || (sleep 3 && rm -f \/etc\/apt\/apt.conf.d\/01proxy && apt-get update))/apt-get update/' "$MUTANT_FALLBACK_DIR/deploy/Dockerfile"
+
+if grep -q "apt-get" "$MUTANT_FALLBACK_DIR/deploy/Dockerfile" && ! grep -qE "\(apt-get update \|\|" "$MUTANT_FALLBACK_DIR/deploy/Dockerfile"; then
+    echo "✓ Mutante (remoção de fallback em apt-get update) capturado com precisão."
+    rm -rf "$MUTANT_FALLBACK_DIR"
+else
+    rm -rf "$MUTANT_FALLBACK_DIR"
+    echo "❌ Erro: Falha ao capturar mutante sem fallback em apt-get update."
+    exit 1
+fi
+
+echo "🎉 TODOS OS TESTES E MUTAÇÕES PASSARAM COM SUCESSO!"
+exit 0
+
 exit 0
