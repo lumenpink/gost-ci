@@ -27,6 +27,18 @@ for df in $DOCKERFILES; do
             echo "  ❌ FALHA: $rel_path usa apt-get mas não configura Acquire::http::Timeout."
             FAILED=1
         fi
+        if grep -q "Acquire::http::Retries" "$df"; then
+            echo "  ✓ $rel_path: Configuração Acquire::http::Retries presente."
+        else
+            echo "  ❌ FALHA: $rel_path usa apt-get mas não configura Acquire::http::Retries."
+            FAILED=1
+        fi
+        if grep -qE "\(apt-get update \|\|" "$df"; then
+            echo "  ✓ $rel_path: Fallback/retry em apt-get update presente."
+        else
+            echo "  ❌ FALHA: $rel_path usa apt-get mas não configura fallback em apt-get update."
+            FAILED=1
+        fi
         if grep -q "Acquire::http::Proxy" "$df" && grep -q "rm -f /etc/apt/apt.conf.d/01proxy" "$df"; then
             echo "  ✓ $rel_path: Configuração de proxy dinâmico 01proxy presente e com limpeza."
         else
