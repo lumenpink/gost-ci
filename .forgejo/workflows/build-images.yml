@@ -16,6 +16,7 @@ env:
   NO_PROXY: "localhost,127.0.0.1,gambi.2lp.in,crates.2lp.in"
 
 jobs:
+  # --- Onda 1: Imagens Base e Rápidas (sem dependências) ---
   build-rust:
     name: "Build & Push gost-ci-rust"
     runs-on: ubuntu-latest
@@ -82,6 +83,7 @@ jobs:
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
             /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/cross --dockerfile=images/cross/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-cross:latest --destination=gambi.2lp.in/lumen/gost-ci-cross:1.99.1"
 
+  # --- Onda 2: Imagens Intermediárias (escalonadas após Onda 1) ---
   build-deploy:
     name: "Build & Push gost-ci-deploy"
     runs-on: ubuntu-latest
@@ -282,6 +284,7 @@ jobs:
             echo '{\"auths\":{\"gambi.2lp.in\":{\"auth\":\"'$(echo -n "lumen:${{ secrets.GAMBI_2LP_IN_TOKEN }}" | base64 | tr -d '\n')'\"}}}' > /kaniko/.docker/config.json &&
             /kaniko/executor --cache=true --cache-repo=gambi.2lp.in/lumen/kaniko-cache --cache-ttl=168h --build-arg http_proxy="http://172.17.0.1:3142" --build-arg HTTP_PROXY="http://172.17.0.1:3142" --context=dir://images/lauda --dockerfile=images/lauda/Dockerfile --destination=gambi.2lp.in/lumen/gost-ci-lauda:latest --destination=gambi.2lp.in/lumen/gost-ci-lauda:1.99.1"
 
+  # --- Onda 3: Imagens Pesadas (escalonadas após Onda 2) ---
   build-banca:
     name: "Build & Push gost-ci-banca"
     runs-on: ubuntu-latest
