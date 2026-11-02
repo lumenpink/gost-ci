@@ -56,5 +56,37 @@ if [[ $FAILURES -gt 0 ]]; then
     exit 1
 fi
 
-echo ">>> Todos os testes de escalonamento passaram com sucesso!"
+echo "=== [MUTATION] Validando sensibilidade a mutantes ==="
+
+# Mutante 1: Ausência de needs em build-banca
+echo -n "-> [MUTAÇÃO 1] Sensibilidade à ausência de needs em build-banca... "
+MUT1_TMP=$(mktemp)
+sed '/build-banca:/,/steps:/ s/needs:.*//' "$WORKFLOW_FILE" > "$MUT1_TMP"
+if ! (grep -B 3 -A 6 "build-banca:" "$MUT1_TMP" | grep -q "needs:"); then
+    echo "✅ OK (Mutante 1 detectado e morto)"
+else
+    echo "❌ FALHOU (Mutante 1 sobreviveu)"
+    FAILURES=$((FAILURES + 1))
+fi
+rm -f "$MUT1_TMP"
+
+# Mutante 2: Ausência de cláusula if resiliente
+echo -n "-> [MUTAÇÃO 2] Sensibilidade à ausência de if: always() && !cancelled()... "
+MUT2_TMP=$(mktemp)
+sed 's/always() && !cancelled()/true/' "$WORKFLOW_FILE" > "$MUT2_TMP"
+COUNT_MUT=$(grep -c "always() && !cancelled()" "$MUT2_TMP" || true)
+if [[ $COUNT_MUT -lt 7 ]]; then
+    echo "✅ OK (Mutante 2 detectado e morto)"
+else
+    echo "❌ FALHOU (Mutante 2 sobreviveu)"
+    FAILURES=$((FAILURES + 1))
+fi
+rm -f "$MUT2_TMP"
+
+if [[ $FAILURES -gt 0 ]]; then
+    echo ">>> Falhas encontradas na mutação: $FAILURES"
+    exit 1
+fi
+
+echo ">>> Todos os testes de escalonamento e mutação passaram com sucesso!"
 exit 0
