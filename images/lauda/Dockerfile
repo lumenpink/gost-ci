@@ -1,16 +1,12 @@
 FROM gambi.2lp.in/lumen/gost-ci-rust:latest
 
-# Limitar concorrência do Cargo para evitar OOM no runner restrito a 4.5G (#47)
-ENV CARGO_BUILD_JOBS=1
-
-# Pré-carregar dependências canônicas do Lauda (ishcondidim, papeli, urupema)
-# para garantir testes herméticos sem acesso à rede em tempo de CI
-RUN mkdir -p /opt/gost/deps && \
-    git clone --depth 1 https://gambi.2lp.in/lumen/ishcondidim.git /opt/gost/deps/ishcondidim && \
-    git clone --depth 1 https://gambi.2lp.in/lumen/papeli.git /opt/gost/deps/papeli && \
-    git clone --depth 1 https://gambi.2lp.in/lumen/urupema.git /opt/gost/deps/urupema && \
-    cd /opt/gost/deps/ishcondidim && cargo check -j 1 && \
-    cd /opt/gost/deps/papeli && cargo check -j 1 && \
-    cd /opt/gost/deps/urupema && cargo check -j 1
+# Instalar binários canônicos pré-compilados dos satélites (ishcondidim, papeli, urupema)
+# gerados e publicados diretamente pelas suas respectivas esteiras de CI (#50)
+RUN curl -fsSL --retry 5 --retry-connrefused --retry-delay 2 "https://gambi.2lp.in/lumen/ishcondidim/releases/download/latest/ishcondidim" -o /usr/local/bin/ishcondidim \
+    && chmod +x /usr/local/bin/ishcondidim \
+    && curl -fsSL --retry 5 --retry-connrefused --retry-delay 2 "https://gambi.2lp.in/lumen/papeli/releases/download/latest/papeli" -o /usr/local/bin/papeli \
+    && chmod +x /usr/local/bin/papeli \
+    && curl -fsSL --retry 5 --retry-connrefused --retry-delay 2 "https://gambi.2lp.in/lumen/urupema/releases/download/latest/urupema" -o /usr/local/bin/urupema \
+    && chmod +x /usr/local/bin/urupema
 
 CMD ["bash"]
