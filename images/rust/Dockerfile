@@ -51,7 +51,13 @@ RUN curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/cccp/nightly/ccc
     && gossnab --version \
     && curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/gossnab/nightly/gn-linux-amd64" -o /usr/local/bin/gn \
     && chmod +x /usr/local/bin/gn \
-    && gn --version
+    && gn --version \
+    && curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/kontur/nightly/kontur-linux-amd64" -o /usr/local/bin/kontur \
+    && chmod +x /usr/local/bin/kontur \
+    && kontur --version \
+    && curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/kontur/nightly/kt-linux-amd64" -o /usr/local/bin/kt \
+    && chmod +x /usr/local/bin/kt \
+    && kt --version
 
 ENV RUSTC_WRAPPER=/usr/local/bin/sccache
 ENV SCCACHE_DIR=/root/.cache/sccache
