@@ -35,12 +35,16 @@ check_tool "$CROSS_DOCKERFILE" "images/cross" "cccp" "generic/cccp/nightly/cccp-
 check_tool "$CROSS_DOCKERFILE" "images/cross" "lunokhod" "generic/lunokhod/nightly/lunokhod-linux-amd64"
 check_tool "$CROSS_DOCKERFILE" "images/cross" "gossnab" "generic/gossnab/nightly/gossnab-linux-amd64"
 check_tool "$CROSS_DOCKERFILE" "images/cross" "gn" "generic/gossnab/nightly/gn-linux-amd64"
+check_tool "$CROSS_DOCKERFILE" "images/cross" "kontur" "generic/kontur/nightly/kontur-linux-amd64"
+check_tool "$CROSS_DOCKERFILE" "images/cross" "kt" "generic/kontur/nightly/kt-linux-amd64"
 
 # 2. Checagens em images/rust/Dockerfile
 check_tool "$RUST_DOCKERFILE" "images/rust" "cccp" "generic/cccp/nightly/cccp-linux-amd64"
 check_tool "$RUST_DOCKERFILE" "images/rust" "lunokhod" "generic/lunokhod/nightly/lunokhod-linux-amd64"
 check_tool "$RUST_DOCKERFILE" "images/rust" "gossnab" "generic/gossnab/nightly/gossnab-linux-amd64"
 check_tool "$RUST_DOCKERFILE" "images/rust" "gn" "generic/gossnab/nightly/gn-linux-amd64"
+check_tool "$RUST_DOCKERFILE" "images/rust" "kontur" "generic/kontur/nightly/kontur-linux-amd64"
+check_tool "$RUST_DOCKERFILE" "images/rust" "kt" "generic/kontur/nightly/kt-linux-amd64"
 
 # [MUTAÇÃO] Teste de sensibilidade à ausência de ferramentas
 echo -n "-> [MUTAÇÃO] Testando sensibilidade à ausência de ferramenta no teste... "
