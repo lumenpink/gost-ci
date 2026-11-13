@@ -49,8 +49,8 @@ check_tool "$RUST_DOCKERFILE" "images/rust" "kt" "generic/kontur/nightly/kt-linu
 # [MUTAÇÃO] Teste de sensibilidade à ausência de ferramentas
 echo -n "-> [MUTAÇÃO] Testando sensibilidade à ausência de ferramenta no teste... "
 MUT_RES=$(python3 -c "
-tools = ['cccp', 'gossnab', 'gn']
-assert 'lunokhod' not in tools, 'Mutação falhou'
+tools = ['cccp', 'gossnab', 'gn', 'lunokhod']
+assert 'kontur' not in tools and 'kt' not in tools, 'Mutação falhou'
 print('OK')
 " 2>&1)
 if [ "$MUT_RES" == "OK" ]; then
