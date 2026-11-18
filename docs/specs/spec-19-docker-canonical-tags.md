@@ -33,7 +33,7 @@ Cada imagem do catálogo `gost-ci` DEVE possuir, no mínimo, as seguintes tags:
    - Tag canônica: `:1.99.1` (Rust + WebKitGTK / libxdo-dev)
 8. **`gost-ci-lauda`**:
    - Tag móvel: `:latest`
-   - Tag canônica: `:1.99.1` (Compilação soberana Lauda / Rust 1.99.1)
+   - Tag canônica: `:1.99.1` (Compilação autônoma Lauda / Rust 1.99.1)
 9. **`gost-ci-banca`**:
    - Tag móvel: `:latest`
    - Tag canônica: `:node24` (Ambiente Node 24 + JDK + ferramentas Android/FDroid)

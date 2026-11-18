@@ -2,7 +2,7 @@
 
 ## 1. Contexto e Motivação
 A compilação do Dioxus CLI (`dx` v0.7.10) exige GLIBC >= 2.39. A imagem anterior baseada no Debian 12 Bookworm continha GLIBC 2.36, causando falha no build do `gost-ci-android`.
-A sub-imagem `gost-ci-android` não requer Node.js, logo a solução canônica e soberana é a inclusão do espelho `mirror-debian:trixie-slim` no script de espelhamento e o uso dessa base limpa com OpenJDK 21 headless.
+A sub-imagem `gost-ci-android` não requer Node.js, logo a solução canônica e autônoma é a inclusão do espelho `mirror-debian:trixie-slim` no script de espelhamento e o uso dessa base limpa com OpenJDK 21 headless.
 
 ## 2. Requisitos Técnicos
 1. **Espelho Upstream**:

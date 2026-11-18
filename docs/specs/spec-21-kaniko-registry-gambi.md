@@ -1,7 +1,7 @@
-# Especificação Técnica — Publicação Exclusiva no Registry Soberano gambi.2lp.in (#21)
+# Especificação Técnica — Publicação Exclusiva no Registry Autônomo gambi.2lp.in (#21)
 
 ## 1. Contexto e Motivação
-A infraestrutura soberana do ecossistema GOST conta com seu próprio Container Registry OCI integrado à forge Forgejo em `gambi.2lp.in`. A publicação de imagens no Docker Hub (`docker.io/lumenpink/*`) foi descontinuada para assegurar:
+A infraestrutura autônoma do ecossistema GOST conta com seu próprio Container Registry OCI integrado à forge Forgejo em `gambi.2lp.in`. A publicação de imagens no Docker Hub (`docker.io/lumenpink/*`) foi descontinuada para assegurar:
 1. Autonomia operacional completa e independência de registries proprietários ou de terceiros.
 2. Eliminação de credenciais externas expostas no ambiente de CI/CD (`DOCKERHUB_USERNAME` e `DOCKERHUB_TOKEN`).
 3. Resolução dos problemas de sintaxe incompatíveis com Forgejo Actions no workflow de compilação de imagens (`build-images.yml`), onde o uso de URLs absolutas em `actions/checkout` gerava falhas nos runners.
@@ -13,7 +13,7 @@ A infraestrutura soberana do ecossistema GOST conta com seu próprio Container R
 ### 2.1 Publicação Exclusiva em gambi.2lp.in
 1. O workflow `.forgejo/workflows/build-images.yml` DEVE configurar o executor Kaniko para enviar as imagens compiladas **estritamente** para o endpoint `gambi.2lp.in/lumen/<imagem>:<tag>`.
 2. Qualquer menção a `docker.io`, `lumenpink/` ou secrets `DOCKERHUB_*` DEVE ser totalmente eliminada do repositório.
-3. Todas as 10 imagens especializadas do catálogo `gost-ci` devem ser publicadas no registry soberano, preservando a tag móvel `:latest` e suas respectivas tags canônicas de versão (definidas na Especificação #19):
+3. Todas as 10 imagens especializadas do catálogo `gost-ci` devem ser publicadas no registry autônomo, preservando a tag móvel `:latest` e suas respectivas tags canônicas de versão (definidas na Especificação #19):
    - `gost-ci-rust`: `:latest`, `:1.99.1`
    - `gost-ci-cross`: `:latest`, `:1.99.1`
    - `gost-ci-deploy`: `:latest`, `:node24`
@@ -25,7 +25,7 @@ A infraestrutura soberana do ecossistema GOST conta com seu próprio Container R
    - `gost-ci-banca`: `:latest`, `:node24`
    - `gost-ci-flutter`: `:latest`, `:android34`
 
-### 2.2 Autenticação Soberana e Validação Fail-Fast
+### 2.2 Autenticação Autônoma e Validação Fail-Fast
 1. A autenticação do Kaniko no Forgejo Container Registry deve ser realizada contra o domínio `gambi.2lp.in` utilizando o usuário `lumen` e a credencial `GAMBI_2LP_IN_TOKEN`.
 2. Cada job do workflow DEVE validar obrigatoriamente a presença de `GAMBI_2LP_IN_TOKEN`. Caso a variável/secret esteja vazia ou ausente, a execução DEVE abortar imediatamente (*fail-fast*) com mensagem de erro explícita e código de saída diferente de zero, impedindo compilações em vão.
 

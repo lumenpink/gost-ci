@@ -1,7 +1,7 @@
 # Especificação Técnica — Auditoria e Conformidade de Versão Canônica dos Pacotes (#18)
 
 ## 1. Contexto e Motivação
-No ecossistema GOST, todos os projetos distribuem seus binários e pacotes compilados na infraestrutura soberana (Forgejo/Gambi em `git.2lp.in`, Cloudflare R2 e catálogo da Banca).
+No ecossistema GOST, todos os projetos distribuem seus binários e pacotes compilados na infraestrutura autônoma (Forgejo/Gambi em `git.2lp.in`, Cloudflare R2 e catálogo da Banca).
 A especificação canônica de versionamento GOST (Seção 4) determina adesão estrita ao **Semantic Versioning 2.0.0** (`MAJOR.MINOR.PATCH[-PRERELEASE][+BUILD]`).
 
 Foi identificado que determinados workflows de CI/CD concatenavam metadados dinâmicos de compilação (`+${DATE_STAMP}.${GIT_SHA}`) diretamente sobre o conteúdo do arquivo `VERSION`, o qual, gerado pelo CCCP/Gosplan, já continha metadados prévios (por exemplo: `0.1.0-dev.27+20261019.caf0cc7`). O resultado era a geração de strings com duplo delimitador `+` (ex: `0.1.0-dev.27+20261019.caf0cc7+20261023.8f3d610`), violando a especificação SemVer 2.0.0 e corrompendo manifestos e registries de pacotes.

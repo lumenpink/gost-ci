@@ -3,11 +3,11 @@
 - **ID do Ticket:** #36
 - **Status:** Aprovado
 - **Autor:** Lumen
-- **Alinhamento:** GOST 1.5.0 (Engenharia de Containers / CI Soberana)
+- **Alinhamento:** GOST 1.5.0 (Engenharia de Containers / CI Autônoma)
 
 ## 1. Contexto & Motivação
 A sub-imagem `gost-ci-cross` atua como o ambiente canônico de execução do `forgejo-runner` sob a tag `ubuntu-latest`.
-Diversos fluxos de integração e verificação de infraestrutura soberana (como a rotina de snapshot a quente do Forgejo em `baquara-infra`) demandam o utilitário de linha de comando `sqlite3` e os headers `libsqlite3-dev` para validar a integridade de bancos relacionais em pipelines herméticos.
+Diversos fluxos de integração e verificação de infraestrutura autônoma (como a rotina de snapshot a quente do Forgejo em `baquara-infra`) demandam o utilitário de linha de comando `sqlite3` e os headers `libsqlite3-dev` para validar a integridade de bancos relacionais em pipelines herméticos.
 
 ## 2. Requisitos Técnicos
 1. **Pacotes APT Obrigatórios:**

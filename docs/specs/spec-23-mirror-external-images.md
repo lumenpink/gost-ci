@@ -1,30 +1,30 @@
 # Especificação Técnica — Espelhamento e Governança de Imagens Base Upstream (#23)
 
 ## 1. Contexto e Motivação
-O ecossistema GOST fundamenta-se nos princípios de soberania tecnológica, reprodutibilidade hermética e capacidade estrita de operação offline. As esteiras de integração e entrega contínua (CI/CD) não devem depender de conectividade externa com registries públicos de terceiros durante seus ciclos de compilação regulares.
+O ecossistema GOST fundamenta-se nos princípios de autonomia técnica, reprodutibilidade hermética e capacidade estrita de operação offline. As esteiras de integração e entrega contínua (CI/CD) não devem depender de conectividade externa com registries públicos de terceiros durante seus ciclos de compilação regulares.
 
 Atualmente, os Dockerfiles mantidos em `images/*` realizam download direto de imagens do Docker Hub público (`node:24-bookworm-slim`, `node:24-trixie-slim`, `debian:bookworm-slim`, `php:8.4-cli`). Essa dependência acarreta:
 1. Vulnerabilidade a flutuações e indisponibilidades de conexão externa.
 2. Penalização por bloqueios de taxa (*rate limits*) de provedores públicos.
 3. Impossibilidade de execução hermética de compilações em ambientes isolados com `--network none`.
 
-Para mitigar esses riscos, a presente especificação estabelece o mecanismo canônico de espelhamento periódico das imagens base no Container Registry soberano (`gambi.2lp.in`) e a conversão de todos os manifestos de construção (`Dockerfile`) para consumo estrito do espelho local.
+Para mitigar esses riscos, a presente especificação estabelece o mecanismo canônico de espelhamento periódico das imagens base no Container Registry autônomo (`gambi.2lp.in`) e a conversão de todos os manifestos de construção (`Dockerfile`) para consumo estrito do espelho local.
 
 ---
 
 ## 2. Requisitos Mandatórios
 
-### 2.1 Matriz Canônica de Imagens Base e Espelhos Soberanos
-Todas as imagens base upstream utilizadas pelo catálogo `gost-ci` devem possuir uma réplica correspondente no registry soberano `gambi.2lp.in/lumen/*`:
+### 2.1 Matriz Canônica de Imagens Base e Espelhos Autônomos
+Todas as imagens base upstream utilizadas pelo catálogo `gost-ci` devem possuir uma réplica correspondente no registry autônomo `gambi.2lp.in/lumen/*`:
 
-| Imagem Upstream | Imagem Espelho Canônica (Soberana) | Finalidade no gost-ci |
+| Imagem Upstream | Imagem Espelho Canônica (Autônoma) | Finalidade no gost-ci |
 | :--- | :--- | :--- |
 | `node:24-bookworm-slim` | `gambi.2lp.in/lumen/mirror-node:24-bookworm-slim` | Base para rust, cross, deploy, gui, shell, banca |
 | `node:24-trixie-slim` | `gambi.2lp.in/lumen/mirror-node:24-trixie-slim` | Base para wasm (Dioxus / toolchain moderno) |
 | `debian:bookworm-slim` | `gambi.2lp.in/lumen/mirror-debian:bookworm-slim` | Base para flutter / Android toolchain |
 | `php:8.4-cli` | `gambi.2lp.in/lumen/mirror-php:8.4-cli` | Base para testes e QA de módulos PHP |
 
-Imagens internas compostas (como `images/lauda/Dockerfile`) devem referenciar exclusivamente a imagem soberana já produzida pelo próprio `gost-ci`:
+Imagens internas compostas (como `images/lauda/Dockerfile`) devem referenciar exclusivamente a imagem autônoma já produzida pelo próprio `gost-ci`:
 - De: `docker.io/lumenpink/gost-ci-rust:latest`
 - Para: `gambi.2lp.in/lumen/gost-ci-rust:latest`
 
@@ -35,7 +35,7 @@ Imagens internas compostas (como `images/lauda/Dockerfile`) devem referenciar ex
 ### 2.3 Script de Sincronização e Atualização (`scripts/sync-upstream-images.sh`)
 O repositório deve fornecer um utilitário canônico com os seguintes comportamentos:
 1. **Autenticação Segura:** Autentica-se contra `gambi.2lp.in` utilizando a variável de ambiente `GAMBI_2LP_IN_TOKEN`. Caso a variável não esteja definida ou seja vazia, o script DEVE abortar com código de saída diferente de zero (*fail-fast*).
-2. **Idempotência:** Realiza `docker pull` da origem upstream, `docker tag` para a denominação soberana e `docker push` para `gambi.2lp.in/lumen/*`.
+2. **Idempotência:** Realiza `docker pull` da origem upstream, `docker tag` para a denominação autônoma e `docker push` para `gambi.2lp.in/lumen/*`.
 3. **Auditoria / Dry-Run:** Aceita o parâmetro `--dry-run` para listar as imagens alvo e verificar configurações sem efetuar o push.
 
 ### 2.4 Esteira Periódica de Auto-Atualização

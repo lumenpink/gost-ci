@@ -1,7 +1,7 @@
 # Spec 16: Atualização para Rust 1.99.1 e Bibliotecas Desktop GUI na Imagem gost-ci-cross
 
 ## 1. Contexto e Motivação
-A esteira de compilação e teste do ecossistema soberano Lumen deve operar com a versão estável mais moderna do compilador Rust (`1.99.1`). Além disso, aplicações com interface gráfica (egui, ratatui com backend avançado, Dioxus Desktop com WebKitGTK) exigem a presença de cabeçalhos de desenvolvimento C do sistema host (`glib-2.0`, `webkit2gtk-4.1`, `asound2`) para execução hermética sem requisições ad-hoc a repositórios de pacotes em tempo de execução.
+A esteira de compilação e teste do ecossistema autônomo Lumen deve operar com a versão estável mais moderna do compilador Rust (`1.99.1`). Além disso, aplicações com interface gráfica (egui, ratatui com backend avançado, Dioxus Desktop com WebKitGTK) exigem a presença de cabeçalhos de desenvolvimento C do sistema host (`glib-2.0`, `webkit2gtk-4.1`, `asound2`) para execução hermética sem requisições ad-hoc a repositórios de pacotes em tempo de execução.
 
 ## 2. Requisitos Técnicos
 1. **Atualização Global do Toolchain Rust:**

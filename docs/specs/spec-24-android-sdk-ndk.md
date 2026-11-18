@@ -1,9 +1,9 @@
 # Especificação Técnica — Provisão de Android SDK & NDK para Compilação de APKs (#24)
 
 ## 1. Contexto e Motivação
-A esteira de CI/CD para compilação e entrega de APKs Android de projetos do ecossistema soberano (como `lauda` e `lacraia`) encontrava-se bloqueada ou dependente de artefatos estáticos manuais porque as imagens de CI soberanas (`gost-ci-cross`, `gost-ci-rust`) não dispunham do Android SDK, NDK nem do compilador `dx` (Dioxus CLI) instalados.
+A esteira de CI/CD para compilação e entrega de APKs Android de projetos do ecossistema autônomo (como `lauda` e `lacraia`) encontrava-se bloqueada ou dependente de artefatos estáticos manuais porque as imagens de CI autônomas (`gost-ci-cross`, `gost-ci-rust`) não dispunham do Android SDK, NDK nem do compilador `dx` (Dioxus CLI) instalados.
 
-Conforme as diretrizes GOST de esteira hermética, reprodutível e soberana, todos os pipelines de empacotamento Android devem executar exclusivamente dentro de contêineres autônomos providos pela forge `gambi.2lp.in`, sem depender de ferramentas instaladas no host ou fallbacks degradados.
+Conforme as diretrizes GOST de esteira hermética, reprodutível e autônoma, todos os pipelines de empacotamento Android devem executar exclusivamente dentro de contêineres autônomos providos pela forge `gambi.2lp.in`, sem depender de ferramentas instaladas no host ou fallbacks degradados.
 
 ## 2. Requisitos Técnicos
 

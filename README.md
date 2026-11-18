@@ -1,11 +1,11 @@
 # gost-ci
 
-Matriz de contêineres especializados e otimizados de CI/CD para projetos sob a norma GOST.
+Matriz de contêineres especializados e otimizados de CI/CD para projetos sob a norma GOST mantida por [lumen.pink](https://lumen.pink).
 
 ## 📋 Conformidade GOST
 
 Este projeto adota a norma **[GOST](https://codeberg.org/lumenpink/gost)** (Gosplan Standard for Technical Software).
-- **Versão GOST:** `1.1.0`
+- **Versão GOST:** `2.1.0`
 - **Linguagens declaradas:** `shell`
 - **Licença de Código:** `Apache-2.0`
 - **Licença de Marca/Logo:** `CC-BY-ND-4.0`
