@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- **ci:** adicionar `ARG CCCP_CACHEBUST` nos Dockerfiles e `--build-arg` no Kaniko para sempre puxar o `cccp` nightly mais recente (closes #56)
+
 ### Fixes
   - (ci) injetar proxy explicito 172.17.0.1:3142 no kaniko e 01proxy temporario no apt (closes #45)
   - (ci) propagar proxy local de build no kaniko e timeouts defensivos no apt (closes #44)

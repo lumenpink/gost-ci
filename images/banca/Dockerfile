@@ -29,6 +29,7 @@ RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries \
     && rm -rf /var/lib/apt/lists/*
 
 # Ferramentas Canônicas do Ecossistema de Dev (Governança, Regras e Catálogo)
+ARG CCCP_CACHEBUST=1
 RUN curl -fsSL "https://gambi.2lp.in/api/packages/lumen/generic/cccp/nightly/cccp-linux-amd64" -o /usr/local/bin/cccp \
     && chmod +x /usr/local/bin/cccp \
     && cccp --help >/dev/null \
